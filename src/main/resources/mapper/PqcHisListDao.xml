@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.PqcHisListDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.PqcHisList">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="list_no" jdbcType="VARCHAR" property="listNo" />
+    <result column="fab" jdbcType="VARCHAR" property="fab" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="sub" jdbcType="VARCHAR" property="sub" />
+    <result column="line" jdbcType="VARCHAR" property="line" />
+    <result column="bgntime" jdbcType="VARCHAR" property="bgntime" />
+    <result column="endtime" jdbcType="VARCHAR" property="endtime" />
+    <result column="crdate" jdbcType="VARCHAR" property="crdate" />
+    <result column="createdate" jdbcType="TIMESTAMP" property="createdate" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="check_type" jdbcType="VARCHAR" property="checkType" />
+    <result column="qc_user" jdbcType="VARCHAR" property="qcUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, list_no, fab, code, sub, line, bgntime, endtime, crdate, createdate, "status", 
+    check_type, qc_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from flow_system.pqc_his_list
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from flow_system.pqc_his_list
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xpwi.springboot.model.PqcHisList" useGeneratedKeys="true">
+    insert into flow_system.pqc_his_list (list_no, fab, code,
+      sub, line, bgntime, 
+      endtime, crdate, createdate, 
+      "status", check_type, qc_user
+      )
+    values (#{listNo,jdbcType=VARCHAR}, #{fab,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{sub,jdbcType=VARCHAR}, #{line,jdbcType=VARCHAR}, #{bgntime,jdbcType=VARCHAR}, 
+      #{endtime,jdbcType=VARCHAR}, #{crdate,jdbcType=VARCHAR}, #{createdate,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=VARCHAR}, #{checkType,jdbcType=VARCHAR}, #{qcUser,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <update id="updateByPqcHisList" parameterType="com.xpwi.springboot.model.PqcHisList">
+    update flow_system.pqc_his_list
+    <set>
+      <if test="fab!=null and fab !=''">
+        fab=#{fab}
+      </if>
+      <if test="code!=null and code !=''">
+        code=#{code}
+      </if>
+      <if test="sub!=null and sub !=''">
+        sub=#{sub}
+      </if>
+      <if test="line!=null and line !=''">
+        line=#{line}
+      </if>
+      <if test="bgntime!=null and bgntime !=''">
+        bgntime=#{bgntime}
+      </if>
+      <if test="endtime!=null and endtime !=''">
+        endtime=#{endtime}
+      </if>
+      <if test="crdate!=null and crdate !=''">
+        crdate=#{crdate}
+      </if>
+      <if test="createdate!=null and createdate !=''">
+        createdate=#{createdate}
+      </if>
+      <if test="status!=null and status !=''">
+        status=#{status}
+      </if>
+      <if test="checkType!=null and checkType !=''">
+        checkType=#{checkType}
+      </if>
+      <if test="qcUser!=null and qcUser !=''">
+        qcUser=#{qcUser}
+      </if>
+  </set>
+    where      list_no=#{listNo}
+  </update>
+    <update id="updatePqcStatus" parameterType="java.lang.String">
+      update flow_system.pqc_his_list set status=#{status} where list_no=#{listNo}
+
+    </update>
+    <select id="selectByPqcHisList" resultMap="BaseResultMap"
+          parameterType="com.xpwi.springboot.model.PqcHisList">
+    select * from flow_system.pqc_his_list
+    <where>
+      <if test="listNo!=null and listNo !=''">
+        list_no=#{listNo}
+      </if>
+      <if test="fab!=null and fab !=''">
+        and fab=#{fab}
+      </if>
+      <if test="code!=null and code !=''">
+        and code=#{code}
+      </if>
+      <if test="sub!=null and sub !=''">
+        and sub=#{sub}
+      </if>
+      <if test="line!=null and line !=''">
+        and line=#{line}
+      </if>
+      <if test="bgntime!=null and endtime !=null and bgntime!='' and endtime !=''">
+       and crdate &gt;= #{bgntime} and crdate &lt;= #{endtime}
+      </if>
+      <if test="createdate!=null and createdate !=''">
+        and createdate=#{createdate}
+      </if>
+      <if test="status!=null and status !=''">
+        and status=#{status}
+      </if>
+      <if test="checkType!=null and checkType !=''">
+        and check_type=#{checkType}
+      </if>
+      <if test="qcUser!=null and qcUser !=''">
+        and qc_user=#{qcUser}
+      </if>
+    </where>
+
+
+
+  </select>
+  <select id="selectPqcHisList" resultMap="BaseResultMap"
+          parameterType="com.xpwi.springboot.model.PqcHisList">
+    select distinct lis.id,lis.list_no,lis.fab,lis.code,lis.sub,lis.line,lis.check_type,lis.qc_user
+    from flow_system.pqc_his_list   lis
+    left join flow_system.pqc_his_list_detail  lisd
+    on lis.list_no =lisd.list_no
+  <where>
+    <if test="fab!=null and fab !=''">
+      and lis.fab=#{fab}
+    </if>
+    <if test="code!=null and code !=''">
+      and lis.code=#{code}
+    </if>
+    <if test="sub!=null and sub !=''">
+      and lis.sub=#{sub}
+    </if>
+    <if test="line!=null and line !=''">
+      and lis.line=#{line}
+    </if>
+    <if test="bgntime!=null and endtime !=null and bgntime!='' and endtime !=''">
+      and lis.crdate &gt;= #{bgntime} and lis.crdate &lt;= #{endtime}
+    </if>
+    <if test="createdate!=null and createdate !=''">
+      and lis.createdate=#{createdate}
+    </if>
+    <if test="status!=null and status !=''">
+      and lis.status in('2','3')
+    </if>
+    <if test="checkType!=null and checkType !=''">
+      and lis.check_type=#{checkType}
+    </if>
+    <if test="qcUser!=null and qcUser !=''">
+      and  lisd.pic_user=#{qcUser}
+    </if>
+    and lisd.suggest is null
+  </where>
+
+  </select>
+  <select id="selectAllByQcUserId" parameterType="java.lang.String" resultType="java.util.Map">
+    select  list_no  formId,check_type "name" , 'nifi_system' createUser,  crdate createDate
+    from flow_system.pqc_his_list where qc_user = #{userId} and status ='1'
+  </select>
+  <select id="selectAllByPicUserId" parameterType="java.lang.String" resultType="java.util.Map">
+    select  list_no  formId,check_type "name" , 'nifi_system' createUser,  crdate createDate
+    from flow_system.pqc_his_list where list_no in (
+    select distinct a.list_no from flow_system.pqc_his_list a
+    left join flow_system.pqc_his_list_detail b on a.list_no  = b.list_no
+    where b.pic_user = #{userId}) and status in ('2','3')
+  </select>
+  <select id="selectAllByQcUserId2" parameterType="java.lang.String" resultType="java.util.Map">
+    select  list_no  formId,check_type "name" , 'nifi_system' createUser,  crdate createDate
+    from flow_system.pqc_his_list where qc_user = #{userId}
+    order by createdate  desc
+  </select>
+  <select id="selectAllByQcUserId3" parameterType="java.lang.String" resultType="java.util.Map">
+    select  list_no  formId,check_type "name" , 'nifi_system' createUser,  crdate createDate
+    from flow_system.pqc_his_list where qc_user =  #{userId} and status = '4'
+    order by createDate  desc
+  </select>
+
+</mapper>

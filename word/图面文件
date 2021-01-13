@@ -1,0 +1,3 @@
+图面保存
+    第一次保存：插入dcc_plat_maintain；插入flow_base_signoff；（删除此表信息）然后插入dcc_plat_message
+    以后保存：  修改dcc_plat_maintain；（判断是否存在）不存在，插入flow_base_signoff；（删除此表信息）然后插入dcc_plat_message

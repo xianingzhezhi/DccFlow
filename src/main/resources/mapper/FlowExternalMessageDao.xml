@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.FlowExternalMessageDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.FlowExternalMessage">
+    <result column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="form_line" jdbcType="VARCHAR" property="formLine" />
+    <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="supply_dep" jdbcType="VARCHAR" property="supplyDep" />
+    <result column="sum_page" jdbcType="VARCHAR" property="sumPage" />
+    <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
+    <result column="customer_ver" jdbcType="VARCHAR" property="customerVer" />
+    <result column="supply_paper" jdbcType="VARCHAR" property="supplyPaper" />
+    <result column="file_number" jdbcType="VARCHAR" property="fileNumber" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <insert id="insert" parameterType="com.xpwi.springboot.model.FlowExternalMessage">
+    insert into flow_system.flow_external_message  (form_id, form_line, file_id,
+      file_name, supply_dep, sum_page, 
+      customer_id, customer_ver, supply_paper, 
+      file_number, remark)
+    values (#{formId,jdbcType=VARCHAR}, #{formLine,jdbcType=VARCHAR}, #{fileId,jdbcType=VARCHAR}, 
+      #{fileName,jdbcType=VARCHAR}, #{supplyDep,jdbcType=VARCHAR}, #{sumPage,jdbcType=VARCHAR}, 
+      #{customerId,jdbcType=VARCHAR}, #{customerVer,jdbcType=VARCHAR}, #{supplyPaper,jdbcType=VARCHAR}, 
+      #{fileNumber,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <!--update flow_exter_message set file_number = '" + file_no + "'
+  where form_id = '" + row1["form_id"].ToString() + "'
+  and form_line = " + Convert.ToInt32(row1["form_line"].ToString())-->
+  <update id="updateByformId" parameterType="com.xpwi.springboot.model.FlowExternalMessage">
+      update flow_system.flow_external_message
+      <set>
+        <if test="fileNumber!=null">
+          file_number = #{fileNumber},
+        </if>
+      </set>
+      where form_id = #{formId} and form_line =#{formLine}
+  </update>
+
+  <delete id="delete" parameterType="java.lang.String">
+      delete from flow_system.flow_external_message
+    where form_id=#{formId}
+  </delete>
+    <select id="selectAllByFormId" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select * from  flow_system.flow_external_message fem
+      where form_id = #{formId}
+    </select>
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xpwi.springboot.dao.FlowBaseSignprocessDao">
+    <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.FlowBaseSignprocess">
+        <result column="form_id" jdbcType="VARCHAR" property="formId" />
+        <result column="user_id" jdbcType="VARCHAR" property="userId" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+        <result column="stage_id" jdbcType="VARCHAR" property="stageId" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+    </resultMap>
+    <insert id="insertProcess">
+        insert into flow_system.flow_base_signprocess(form_id,user_id,user_name,department_id,stage_id,"type")
+        values(#{form_id},#{user_id},#{user_name},#{department_id},#{stage_id},'dcc')
+    </insert>
+
+    <delete id="delByFormId">
+        delete  from flow_system.flow_base_signprocess where form_id = #{form_id}
+    </delete>
+    <select id="findAll" resultType="com.xpwi.springboot.model.FlowBaseSignprocess" parameterType="com.xpwi.springboot.model.FlowBaseSignprocess">
+        SELECT *  FROM flow_system.flow_base_signprocess
+        <where>
+            <if test="formId !=null and formId != ''">
+                form_id=#{formId}
+            </if>
+        </where>
+    </select>
+    <select id="selectByFormSs" parameterType="string" resultMap="BaseResultMap">
+        select * from flow_system.flow_base_signprocess where form_id = #{form_id} and type = #{type}
+    </select>
+    <select id="selectByFormIdAndStage" resultType="com.xpwi.springboot.model.FlowBaseSignprocess" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from flow_system.flow_base_signprocess where form_id = #{formId} and stage_id = #{stageId} order by stage_id
+    </select>
+    <select id="selectAllByFormId" resultType="com.xpwi.springboot.model.FlowBaseSignprocess">
+        SELECT *  FROM flow_system.flow_base_signprocess
+        <where>
+            <if test="formId !=null and formId != ''">
+                form_id=#{formId}
+            </if>
+        </where>
+    </select>
+    <select id="selectAllProcessed" resultType="com.xpwi.springboot.model.FlowBaseSignprocess" resultMap="BaseResultMap">
+      SELECT '第' || a.stage_id || '關' as stage_id,a.department_id ,b.department_name,a.user_id,a.user_name,
+                    (case when stage_id ='1' then '直接主管' when stage_id='2'  then '會簽部門' when stage_id='3' then 'DCC主管' else 'DCC' end) typed
+                     from flow_system.flow_base_signprocess a,flow_system.flow_base_dept b where a.form_id =#{formId} and a.department_id = b.department_id order by a.stage_id
+    </select>
+    <select id="findByformidAndStageid" resultType="java.util.Map" parameterType="string">
+        select department_id || '-' || user_id || '-' || user_name as one from flow_system.flow_base_signprocess where form_id = #{form_id} and stage_id = #{stage_id}
+    </select>
+    <select id="findAndStageid" resultType="java.lang.String" parameterType="string">
+        select department_id || '-' || user_id || '-' || user_name as one from flow_system.flow_base_signprocess where form_id = #{form_id} and stage_id = #{stage_id}
+
+    </select>
+</mapper>

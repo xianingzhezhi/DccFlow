@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.FlowOpIsofiles2Dao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.FlowOpIsofiles2">
+    <id column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="file_type" jdbcType="VARCHAR" property="fileType" />
+    <result column="group_level" jdbcType="VARCHAR" property="groupLevel" />
+    <result column="file_nature" jdbcType="VARCHAR" property="fileNature" />
+    <result column="file_range" jdbcType="VARCHAR" property="fileRange" />
+    <result column="function1" jdbcType="VARCHAR" property="function1" />
+    <result column="management_system" jdbcType="VARCHAR" property="managementSystem" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    form_id, file_type, group_level, file_nature, file_range, function1, management_system,
+    create_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from flow_system.flow_op_isofiles2
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from flow_system.flow_op_isofiles2
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" keyColumn="form_id" keyProperty="formId" parameterType="com.xpwi.springboot.model.FlowOpIsofiles2" useGeneratedKeys="true">
+    insert into flow_system.flow_op_isofiles2 (file_type, group_level, file_nature,
+      file_range, function1, management_system,
+      create_date)
+    values (#{fileType,jdbcType=VARCHAR}, #{groupLevel,jdbcType=VARCHAR}, #{fileNature,jdbcType=VARCHAR},
+      #{fileRange,jdbcType=VARCHAR}, #{function1,jdbcType=VARCHAR}, #{managementSystem,jdbcType=VARCHAR},
+      #{createDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="form_id" keyProperty="formId" parameterType="com.xpwi.springboot.model.FlowOpIsofiles2" useGeneratedKeys="true">
+    insert into flow_system.flow_op_isofiles2
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        form_id,
+      </if>
+      <if test="fileType != null">
+        file_type,
+      </if>
+      <if test="groupLevel != null">
+        group_level,
+      </if>
+      <if test="fileNature != null">
+        file_nature,
+      </if>
+      <if test="fileRange != null">
+        file_range,
+      </if>
+      <if test="function1 != null">
+        function1,
+      </if>
+      <if test="managementSystem != null">
+        management_system,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        #{formId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileType != null">
+        #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="groupLevel != null">
+        #{groupLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="fileNature != null">
+        #{fileNature,jdbcType=VARCHAR},
+      </if>
+      <if test="fileRange != null">
+        #{fileRange,jdbcType=VARCHAR},
+      </if>
+      <if test="function1 != null">
+        #{function1,jdbcType=VARCHAR},
+      </if>
+      <if test="managementSystem != null">
+        #{managementSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xpwi.springboot.model.FlowOpIsofiles2">
+    update flow_system.flow_op_isofiles2
+    <set>
+      <if test="fileType != null">
+        file_type = #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="groupLevel != null">
+        group_level = #{groupLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="fileNature != null">
+        file_nature = #{fileNature,jdbcType=VARCHAR},
+      </if>
+      <if test="fileRange != null">
+        file_range = #{fileRange,jdbcType=VARCHAR},
+      </if>
+      <if test="function1 != null">
+        function1 = #{function1,jdbcType=VARCHAR},
+      </if>
+      <if test="managementSystem != null">
+        management_system = #{managementSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xpwi.springboot.model.FlowOpIsofiles2">
+    update flow_system.flow_op_isofiles2
+    set file_type = #{fileType,jdbcType=VARCHAR},
+      group_level = #{groupLevel,jdbcType=VARCHAR},
+      file_nature = #{fileNature,jdbcType=VARCHAR},
+      file_range = #{fileRange,jdbcType=VARCHAR},
+      function1 = #{function1,jdbcType=VARCHAR},
+      management_system = #{managementSystem,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.FlowOpMessageDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.FlowOpMessage">
+    <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="version" jdbcType="VARCHAR" property="version" />
+    <result column="row_no" jdbcType="VARCHAR" property="rowNo" />
+    <result column="row_version" jdbcType="VARCHAR" property="rowVersion" />
+    <result column="row_name" jdbcType="VARCHAR" property="rowName" />
+    <result column="row_age" jdbcType="VARCHAR" property="rowAge" />
+    <result column="row_department_id" jdbcType="VARCHAR" property="rowDepartmentId" />
+    <result column="flag" jdbcType="VARCHAR" property="flag" />
+  </resultMap>
+  <insert id="insert" parameterType="com.xpwi.springboot.model.FlowOpMessage">
+    insert into "flow_op_message" (file_id, file_name, version, 
+      row_no, row_version, row_name, 
+      row_age, row_department_id, flag
+      )
+    values (#{fileId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, 
+      #{rowNo,jdbcType=VARCHAR}, #{rowVersion,jdbcType=VARCHAR}, #{rowName,jdbcType=VARCHAR}, 
+      #{rowAge,jdbcType=VARCHAR}, #{rowDepartmentId,jdbcType=VARCHAR}, #{flag,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xpwi.springboot.model.FlowOpMessage">
+    insert into "flow_op_message"
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fileId != null">
+        file_id,
+      </if>
+      <if test="fileName != null">
+        file_name,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="rowNo != null">
+        row_no,
+      </if>
+      <if test="rowVersion != null">
+        row_version,
+      </if>
+      <if test="rowName != null">
+        row_name,
+      </if>
+      <if test="rowAge != null">
+        row_age,
+      </if>
+      <if test="rowDepartmentId != null">
+        row_department_id,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fileId != null">
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="rowNo != null">
+        #{rowNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rowVersion != null">
+        #{rowVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="rowName != null">
+        #{rowName,jdbcType=VARCHAR},
+      </if>
+      <if test="rowAge != null">
+        #{rowAge,jdbcType=VARCHAR},
+      </if>
+      <if test="rowDepartmentId != null">
+        #{rowDepartmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+    <select id="selectAllByRowNoAndRowVersion" resultType="com.xpwi.springboot.model.FlowOpMessage">
+      select * from flow_system.flow_op_rowmessage
+      <where>
+        <if test="rowVersion!=null">
+          row_version  = #{rowVersion}
+        </if>
+        <if test="rowNo!=null">
+          row_no  = #{rowNo}
+        </if>s
+      </where>
+    </select>
+</mapper>

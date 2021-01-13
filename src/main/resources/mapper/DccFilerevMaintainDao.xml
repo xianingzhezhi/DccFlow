@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.DccFilerevMaintainDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.DccFilerevMaintain">
+    <result column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="apply_date" jdbcType="VARCHAR" property="applyDate" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="form_type" jdbcType="VARCHAR" property="formType" />
+    <result column="form_state" jdbcType="VARCHAR" property="formState" />
+    <result column="use_mark" jdbcType="VARCHAR" property="useMark" />
+  </resultMap>
+  <insert id="insert" parameterType="com.xpwi.springboot.model.DccFilerevMaintain">
+    insert into flow_system.dcc_filerev_maintain (form_id, apply_date, create_user_id,
+      create_user, department_id, department_name, 
+      form_type, form_state, use_mark
+      )
+    values (#{formId,jdbcType=VARCHAR}, #{applyDate,jdbcType=VARCHAR}, #{createUserId,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, 
+      #{formType,jdbcType=VARCHAR}, #{formState,jdbcType=VARCHAR}, #{useMark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xpwi.springboot.model.DccFilerevMaintain">
+    insert into flow_system.dcc_filerev_maintain
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        form_id,
+      </if>
+      <if test="applyDate != null">
+        apply_date,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="departmentName != null">
+        department_name,
+      </if>
+      <if test="formType != null">
+        form_type,
+      </if>
+      <if test="formState != null">
+        form_state,
+      </if>
+      <if test="useMark != null">
+        use_mark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        #{formId,jdbcType=VARCHAR},
+      </if>
+      <if test="applyDate != null">
+        #{applyDate,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentName != null">
+        #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="formType != null">
+        #{formType,jdbcType=VARCHAR},
+      </if>
+      <if test="formState != null">
+        #{formState,jdbcType=VARCHAR},
+      </if>
+      <if test="useMark != null">
+        #{useMark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.xpwi.springboot.model.DccFilerevMaintain">
+    update flow_system.dcc_filerev_maintain
+    <set>
+      <if test="formId != null and formId!=''">
+        form_id=#{formId},
+      </if>
+      <if test="applyDate != null and applyDate!=''">
+        apply_date=#{applyDate},
+      </if>
+      <if test="createUserId != null and createUserId!=''">
+        create_user_id=#{createUserId},
+      </if>
+      <if test="createUser != null and createUser!=''">
+        create_user=#{createUser},
+      </if>
+      <if test="departmentId != null and departmentId!=''">
+        department_id=#{departmentId},
+      </if>
+      <if test="departmentName != null and departmentName!=''">
+        department_name=#{departmentName},
+      </if>
+      <if test="formType != null and formType!=''" >
+        form_type=#{formType},
+      </if>
+      <if test="formState != null and formState!=''">
+        form_state=#{formState},
+      </if>
+      <if test="useMark != null and useMark!=''">
+        use_mark=#{useMark},
+      </if>
+    </set>
+    where form_id=#{formId}
+  </update>
+  <update id="updateByFormId" parameterType="java.lang.String">
+    update flow_system.dcc_filerev_maintain set form_state='0'
+     where form_id=#{formId}
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.xpwi.springboot.model.DccFilerevMaintain">
+      select * from  flow_system.dcc_filerev_maintain
+      <where>
+        <if test="formId!=null and formId!=''">
+          form_id=#{formId}
+        </if>
+        <if test="formState!=null and formState!=''">
+          and form_state=#{formState}
+        </if>
+      </where>
+    </select>
+  <select id="isSameOne" resultMap="BaseResultMap" parameterType="com.xpwi.springboot.model.DccFilerevMaintain">
+
+ select x.create_user_id from (select f.create_user_id   from flow_system.dcc_filerev_maintain f where f.form_id = #{formId}
+                 union select s.user_id create_user_id from flow_system.flow_base_signoff s where s.form_id = #{formId} and flag = '10') x
+                 where x.create_user_id  = #{createUserId}
+  </select>
+    <select id="selectByFormIdAndUserIdAndRouterStage" resultType="com.xpwi.springboot.model.FormTrackVO">
+       select  form_id,'ReviewForm' as form_name,
+            (case when form_type = '0' then '新增'
+                    when form_type = '1' then '變更' else '作廢' end)as form_type,
+             (case  when form_state = '0' then '開立'
+                    when form_state = '1' then '送簽中'
+                    when form_state = '2' then '結案'
+                    else '作廢' end) as form_state,
+            create_user as form_employ,apply_date as form_date
+        from flow_system.dcc_filerev_maintain
+      <where>
+        <if test="state!=null and state!=''">
+          and form_state=#{state}
+        </if>
+        <if test="user_id!=null and user_id!=''">
+          and create_user_id=#{user_id}
+        </if>
+      </where>
+
+
+    </select>
+    <select id="selectAllByUserSignedList" parameterType="java.lang.String" resultType="java.util.Map">
+        select now() updateDate, b.form_id formId,b.department_name "name" , B.create_user createUser,B.apply_date createDate
+        from   flow_system.flow_base_signoff a
+        left join flow_system.dcc_filerev_maintain b on a.form_id  = b.form_id
+        where a.user_id  = #{userId}  and a.flag = 'N' and b.form_id != ''
+        and  (a.form_id,to_number(a.state,'999') )  in (
+        select form_id , min(to_number(state , '999')) state  from flow_system.flow_base_signoff
+        where flag  = 'N' and state != '10'
+        group by form_id  )
+    </select>
+  <select id="selectAllByUserWriteList" parameterType="java.lang.String" resultType="java.util.Map">
+        select now() updateDate, b.form_id formId,b.department_name "name" , B.create_user createUser,B.apply_date createDate
+        from flow_system.dcc_filerev_maintain b
+        where create_user_id  = #{userId}
+        order by apply_date desc
+  </select>
+  <select id="selectAllByUserClosedList"  parameterType="java.lang.String" resultType="java.util.Map">
+    select now() updateDate, b.form_id formId,b.department_name "name" , B.create_user createUser,B.apply_date createDate
+    from flow_system.dcc_filerev_maintain b
+    where create_user_id  = #{userId} and form_state = '2'
+    order by apply_date desc
+  </select>
+</mapper>

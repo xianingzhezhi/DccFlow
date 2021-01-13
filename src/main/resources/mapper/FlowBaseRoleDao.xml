@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.FlowBaseRoleDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.FlowBaseRole">
+    <id column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <result column="role_url" jdbcType="VARCHAR" property="roleUrl" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="role_remark" jdbcType="VARCHAR" property="roleRemark" />
+    <result column="role_type" jdbcType="VARCHAR" property="roleType" />
+    <result column="flag" jdbcType="VARCHAR" property="flag" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="link" jdbcType="VARCHAR" property="link" />
+    <result column="text" jdbcType="VARCHAR" property="text" />
+    <result column="i18n" jdbcType="VARCHAR" property="i18n" />
+    <result column="tree_id" jdbcType="VARCHAR" property="treeId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    role_id, role_url, create_date, create_user, role_remark, role_type, flag, icon, 
+    link, "text", i18n, tree_id
+  </sql>
+  <select id="selectByPrimaryKeyLike" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from flow_system.flow_base_role
+    where role_id like '${roleId}%'
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from flow_system.flow_base_role
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" keyColumn="role_id" keyProperty="roleId" parameterType="com.xpwi.springboot.model.FlowBaseRole" useGeneratedKeys="true">
+    insert into flow_system.flow_base_role (role_url, create_date, create_user, 
+      role_remark, role_type, flag, 
+      icon, link, "text", i18n, 
+      tree_id)
+    values (#{roleUrl,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{roleRemark,jdbcType=VARCHAR}, #{roleType,jdbcType=VARCHAR}, #{flag,jdbcType=VARCHAR}, 
+      #{icon,jdbcType=VARCHAR}, #{link,jdbcType=VARCHAR}, #{text,jdbcType=VARCHAR}, #{i18n,jdbcType=VARCHAR}, 
+      #{treeId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="role_id" keyProperty="roleId" parameterType="com.xpwi.springboot.model.FlowBaseRole" useGeneratedKeys="true">
+    insert into flow_system.flow_base_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleUrl != null">
+        role_url,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="roleRemark != null">
+        role_remark,
+      </if>
+      <if test="roleType != null">
+        role_type,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="link != null">
+        link,
+      </if>
+      <if test="text != null">
+        "text",
+      </if>
+      <if test="i18n != null">
+        i18n,
+      </if>
+      <if test="treeId != null">
+        tree_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleUrl != null">
+        #{roleUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="roleRemark != null">
+        #{roleRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="roleType != null">
+        #{roleType,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null">
+        #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="text != null">
+        #{text,jdbcType=VARCHAR},
+      </if>
+      <if test="i18n != null">
+        #{i18n,jdbcType=VARCHAR},
+      </if>
+      <if test="treeId != null">
+        #{treeId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xpwi.springboot.model.FlowBaseRole">
+    update flow_system.flow_base_role
+    <set>
+      <if test="roleUrl != null">
+        role_url = #{roleUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="roleRemark != null">
+        role_remark = #{roleRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="roleType != null">
+        role_type = #{roleType,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        flag = #{flag,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null">
+        link = #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="text != null">
+        "text" = #{text,jdbcType=VARCHAR},
+      </if>
+      <if test="i18n != null">
+        i18n = #{i18n,jdbcType=VARCHAR},
+      </if>
+      <if test="treeId != null">
+        tree_id = #{treeId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xpwi.springboot.model.FlowBaseRole">
+    update flow_system.flow_base_role
+    set role_url = #{roleUrl,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      role_remark = #{roleRemark,jdbcType=VARCHAR},
+      role_type = #{roleType,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      link = #{link,jdbcType=VARCHAR},
+      "text" = #{text,jdbcType=VARCHAR},
+      i18n = #{i18n,jdbcType=VARCHAR},
+      tree_id = #{treeId,jdbcType=VARCHAR}
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </update>
+</mapper>

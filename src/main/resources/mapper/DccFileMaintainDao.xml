@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.DccFileMaintainDao">
+    <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.DccFileMaintain">
+        <result column="form_id" jdbcType="VARCHAR" property="formId"/>
+        <result column="apply_date" jdbcType="VARCHAR" property="applyDate"/>
+        <result column="create_user_id" jdbcType="VARCHAR" property="createUserId"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="department_id" jdbcType="VARCHAR" property="departmentId"/>
+        <result column="department_name" jdbcType="VARCHAR" property="departmentName"/>
+        <result column="sub_type" jdbcType="VARCHAR" property="subType"/>
+        <result column="sub_mark" jdbcType="VARCHAR" property="subMark"/>
+        <result column="user_type" jdbcType="VARCHAR" property="userType"/>
+        <result column="get_type" jdbcType="VARCHAR" property="getType"/>
+        <result column="get_use" jdbcType="VARCHAR" property="getUse"/>
+        <result column="up_need" jdbcType="VARCHAR" property="upNeed"/>
+        <result column="company_header" jdbcType="VARCHAR" property="companyHeader"/>
+        <result column="company_addr" jdbcType="VARCHAR" property="companyAddr"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="user_tel" jdbcType="VARCHAR" property="userTel"/>
+        <result column="user_fax" jdbcType="VARCHAR" property="userFax"/>
+        <result column="user_mail" jdbcType="VARCHAR" property="userMail"/>
+        <result column="form_type" jdbcType="VARCHAR" property="formType"/>
+        <result column="form_state" jdbcType="VARCHAR" property="formState"/>
+        <result column="use_mark" jdbcType="VARCHAR" property="useMark"/>
+
+    </resultMap>
+    <insert id="insert" parameterType="com.xpwi.springboot.model.DccFileMaintain">
+    insert into flow_system.dcc_file_maintain (form_id, apply_date, create_user_id,
+      create_user, department_id, department_name, 
+      sub_type, sub_mark, user_type, 
+      get_type, get_use, up_need, 
+      company_header, company_addr, user_name, 
+      user_tel, user_fax, user_mail, 
+      form_type, form_state, use_mark)
+    values (#{formId,jdbcType=VARCHAR}, #{applyDate,jdbcType=VARCHAR}, #{createUserId,jdbcType=VARCHAR},
+      #{createUser,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, 
+      #{subType,jdbcType=VARCHAR}, #{subMark,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, 
+      #{getType,jdbcType=VARCHAR}, #{getUse,jdbcType=VARCHAR}, #{upNeed,jdbcType=VARCHAR}, 
+      #{companyHeader,jdbcType=VARCHAR}, #{companyAddr,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{userTel,jdbcType=VARCHAR}, #{userFax,jdbcType=VARCHAR}, #{userMail,jdbcType=VARCHAR}, 
+      #{formType,jdbcType=VARCHAR}, #{formState,jdbcType=VARCHAR}, #{useMark,jdbcType=VARCHAR})
+  </insert>
+
+
+  <update id="update" parameterType="com.xpwi.springboot.model.DccFileMaintain">
+    update  flow_system.dcc_file_maintain
+    <set>
+    <if test=" formId!= null and formId!= '' ">
+      form_id = #{formId},
+    </if>
+      <if test="applyDate!= null and applyDate!= ''">
+        apply_date = #{applyDate},
+      </if>
+      <if test=" createUserId!= null and createUserId!= '' ">
+        create_user_id = #{createUserId},
+      </if>
+      <if test=" createUser!= null and createUser!= '' ">
+        create_user = #{createUser},
+      </if>
+      <if test=" departmentId!= null and departmentId!= '' ">
+        department_id = #{departmentId},
+      </if>
+      <if test=" departmentName!= null and departmentName!= '' ">
+        department_name = #{departmentName},
+      </if>
+      <if test=" subType!= null and subType!= '' ">
+        sub_type = #{subType},
+      </if>
+      <if test=" getUse!= null and getUse!= '' ">
+        get_use = #{getUse},
+      </if>
+      <if test=" upNeed!= null and upNeed!= '' ">
+        up_need = #{upNeed},
+      </if>
+      <if test=" companyHeader!= null and companyHeader!= '' ">
+        company_header = #{companyHeader},
+      </if>
+      <if test=" companyAddr!= null and companyAddr!= '' ">
+        company_addr = #{companyAddr},
+      </if>
+      <if test=" userName!= null and userName!= '' ">
+        user_name = #{userName},
+      </if>
+      <if test=" userTel!= null and userTel!= '' ">
+        user_tel = #{userTel},
+      </if>
+      <if test=" userFax!= null and userFax!= '' ">
+        user_fax = #{userFax},
+      </if>
+      <if test=" userMail!= null and userMail!= '' ">
+        user_mail = #{userMail},
+      </if>
+      <if test=" formType!= null and formType!= '' ">
+        form_type = #{formType},
+      </if>
+      <if test=" formState!= null and formState!= '' ">
+        form_state = #{formState},
+      </if>
+      <if test=" useMark!= null and useMark!= '' ">
+        use_mark = #{useMark}
+      </if>
+        </set>
+        where form_id = #{formId}
+    </update>
+
+    <update id="updateFormStateByFormId" parameterType="string">
+    update flow_system.dcc_file_maintain set  form_state = #{state}  where form_id  = #{formId,jdbcType=VARCHAR}
+  </update>
+    <update id="updateStateByFormId">
+    update flow_system.dcc_file_maintain set form_state = '0' where  form_id=#{form_id}
+  </update>
+    <select id="selectFormState" resultMap="BaseResultMap" parameterType="string">
+        SELECT * FROM flow_system.dcc_file_maintain
+        <where>
+            <if test="formId !=null and formId != ''">
+                form_id=#{formId}
+            </if>
+        </where>
+    </select>
+
+    <select id="findByCondition" resultMap="BaseResultMap" parameterType="com.xpwi.springboot.model.DccFileMaintain">
+        SELECT * FROM flow_system.dcc_file_maintain
+        <where>
+            <if test="formId !=null and formId != ''">
+                form_id=#{formId}
+            </if>
+            <if test="formState !=null and formState != ''">
+                and form_state=#{formState}
+            </if>
+        </where>
+
+    </select>
+    <select id="selectIsSameUser" resultMap="BaseResultMap">
+    select a.create_user_id from (select create_user_id from flow_system.dcc_file_maintain  where form_id = #{form_id}
+                 union select user_id  create_user_id from flow_system.flow_base_signoff  where form_id = #{form_id} and state = '10') a
+                 where a.create_user_id  = #{user_id}
+  </select>
+    <!--  草稿箱-->
+    <select id="selectByFormIdAndUserIdAndState" resultType="com.xpwi.springboot.model.FormTrackVO">
+        select form_id,'文件增/補' form_name,(case when form_type = '0' then '新增' when form_type = '1' then '變更' else '作廢' end) as form_type,
+                  (case when form_state = '0' then '開立' when form_state = '1' then '送簽中' when form_state = '2' then '結案'
+                  else '作廢' end) as form_state,create_user as form_employ,apply_date as form_date,create_user as form_write
+                  from flow_system.dcc_file_maintain
+        <where>
+          <if test="form_state!=null and form_state!=''">
+          form_state=#{form_state}
+        </if>
+          <if test="user_id!=null and user_id!=''">
+           and create_user_id=#{user_id}
+          </if>
+        </where>
+  </select>
+    <select id="selectAllByUserSignedList" parameterType="java.lang.String" resultType="java.util.Map">
+        select now() updateDate, b.form_id formId,b.department_name "name" , B.create_user createUser,B.apply_date createDate from   flow_system.flow_base_signoff a
+        left join flow_system.dcc_file_maintain b on a.form_id  = b.form_id
+        where a.user_id  = #{userId} and a.flag = 'N' and b.form_id != ''
+        and  (a.form_id,to_number(a.state,'999') )  in (
+        select form_id , min(to_number(state , '999')) state  from flow_system.flow_base_signoff
+        where flag  = 'N' and state != '10'
+        group by form_id  )
+    </select>
+    <select id="selectAllByUserWriteList" parameterType="java.lang.String" resultType="java.util.Map">
+        select now() updateDate, b.form_id formId,b.department_name "name" , B.create_user createUser,B.apply_date createDate
+        from flow_system.dcc_file_maintain b
+        where create_user_id  =#{userId}
+        order by apply_date desc
+    </select>
+    <select id="selectAllByUserClosedList" resultType="java.util.Map">
+        select now() updateDate, b.form_id formId,b.department_name "name" , B.create_user createUser,B.apply_date createDate
+        from flow_system.dcc_file_maintain b
+        where create_user_id  =#{userId}  and form_state = '2'
+        order by apply_date desc
+    </select>
+</mapper>

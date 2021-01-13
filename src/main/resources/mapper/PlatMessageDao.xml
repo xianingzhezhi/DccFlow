@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.PlatMessageDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.PlatMessage">
+    <id column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="model_id" jdbcType="VARCHAR" property="modelId" />
+    <result column="draw_id" jdbcType="VARCHAR" property="drawId" />
+    <result column="version_id" jdbcType="VARCHAR" property="versionId" />
+    <result column="share_info" jdbcType="VARCHAR" property="shareInfo" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="material_id" jdbcType="VARCHAR" property="materialId" />
+    <result column="draw_up_id" jdbcType="VARCHAR" property="drawUpId" />
+    <result column="update_reason" jdbcType="VARCHAR" property="updateReason" />
+    <result column="version_up_id" jdbcType="VARCHAR" property="versionUpId" />
+    <result column="material_up_id" jdbcType="VARCHAR" property="materialUpId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    form_id, model_id, draw_id, version_id, share_info, material_name, material_id, draw_up_id, 
+    update_reason, version_up_id, material_up_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from flow_system.dcc_plat_message
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </select>
+    <select id="selectsByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="com.xpwi.springboot.model.PlatMessage">
+        select dpm2.draw_id from flow_system.dcc_plat_maintain dpm
+        left join flow_system.dcc_plat_message dpm2  on dpm .form_id =dpm2.form_id
+        where dpm.form_type !='2'
+         and   dpm.form_state !='2'
+        and dpm2.draw_id =#{drawId}
+        and dpm2.material_name =#{materialName}
+        and dpm2.version_id =#{versionId}
+
+    </select>
+    <select id="selectAllLeftJoinMaintainByDrawId" resultType="java.util.Map">
+        select * from  flow_system.dcc_plat_message a ,
+       flow_system.dcc_plat_maintain b
+      where  a.form_id  = b.form_id and b.form_type  = '2' and b.form_state != '2'
+      and a.model_id  = #{ModelId} and  a.draw_id  = #{DrawId}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from flow_system.dcc_plat_message
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xpwi.springboot.model.PlatMessage" >
+    insert into flow_system.dcc_plat_message (form_id,model_id, draw_id, version_id,
+      share_info, material_name, material_id, 
+      draw_up_id, update_reason, version_up_id, 
+      material_up_id)
+    values (#{formId},#{modelId,jdbcType=VARCHAR}, #{drawId,jdbcType=VARCHAR}, #{versionId,jdbcType=VARCHAR},
+      #{shareInfo,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, #{materialId,jdbcType=VARCHAR}, 
+      #{drawUpId,jdbcType=VARCHAR}, #{updateReason,jdbcType=VARCHAR}, #{versionUpId,jdbcType=VARCHAR}, 
+      #{materialUpId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="form_id" keyProperty="formId" parameterType="com.xpwi.springboot.model.PlatMessage" useGeneratedKeys="true">
+    insert into flow_system.dcc_plat_message
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        form_id,
+      </if>
+      <if test="modelId != null">
+        model_id,
+      </if>
+      <if test="drawId != null">
+        draw_id,
+      </if>
+      <if test="versionId != null">
+        version_id,
+      </if>
+      <if test="shareInfo != null">
+        share_info,
+      </if>
+      <if test="materialName != null">
+        material_name,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="drawUpId != null">
+        draw_up_id,
+      </if>
+      <if test="updateReason != null">
+        update_reason,
+      </if>
+      <if test="versionUpId != null">
+        version_up_id,
+      </if>
+      <if test="materialUpId != null">
+        material_up_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        #{formId,jdbcType=VARCHAR},
+      </if>
+      <if test="modelId != null">
+        #{modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="drawId != null">
+        #{drawId,jdbcType=VARCHAR},
+      </if>
+      <if test="versionId != null">
+        #{versionId,jdbcType=VARCHAR},
+      </if>
+      <if test="shareInfo != null">
+        #{shareInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=VARCHAR},
+      </if>
+      <if test="drawUpId != null">
+        #{drawUpId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateReason != null">
+        #{updateReason,jdbcType=VARCHAR},
+      </if>
+      <if test="versionUpId != null">
+        #{versionUpId,jdbcType=VARCHAR},
+      </if>
+      <if test="materialUpId != null">
+        #{materialUpId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xpwi.springboot.model.PlatMessage">
+    update flow_system.dcc_plat_message
+    <set>
+      <if test="modelId != null">
+        model_id = #{modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="drawId != null">
+        draw_id = #{drawId,jdbcType=VARCHAR},
+      </if>
+      <if test="versionId != null">
+        version_id = #{versionId,jdbcType=VARCHAR},
+      </if>
+      <if test="shareInfo != null">
+        share_info = #{shareInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        material_name = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=VARCHAR},
+      </if>
+      <if test="drawUpId != null">
+        draw_up_id = #{drawUpId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateReason != null">
+        update_reason = #{updateReason,jdbcType=VARCHAR},
+      </if>
+      <if test="versionUpId != null">
+        version_up_id = #{versionUpId,jdbcType=VARCHAR},
+      </if>
+      <if test="materialUpId != null">
+        material_up_id = #{materialUpId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xpwi.springboot.model.PlatMessage">
+    update flow_system.dcc_plat_message
+    set model_id = #{modelId,jdbcType=VARCHAR},
+      draw_id = #{drawId,jdbcType=VARCHAR},
+      version_id = #{versionId,jdbcType=VARCHAR},
+      share_info = #{shareInfo,jdbcType=VARCHAR},
+      material_name = #{materialName,jdbcType=VARCHAR},
+      material_id = #{materialId,jdbcType=VARCHAR},
+      draw_up_id = #{drawUpId,jdbcType=VARCHAR},
+      update_reason = #{updateReason,jdbcType=VARCHAR},
+      version_up_id = #{versionUpId,jdbcType=VARCHAR},
+      material_up_id = #{materialUpId,jdbcType=VARCHAR}
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </update>
+</mapper>

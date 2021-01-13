@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.PlatDataDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.PlatData">
+    <id column="model_id" jdbcType="VARCHAR" property="modelId" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="material_id" jdbcType="VARCHAR" property="materialId" />
+    <result column="draw_id" jdbcType="VARCHAR" property="drawId" />
+    <result column="version_id" jdbcType="VARCHAR" property="versionId" />
+    <result column="share_info" jdbcType="VARCHAR" property="shareInfo" />
+    <result column="update_reason" jdbcType="VARCHAR" property="updateReason" />
+    <result column="plat_valid" jdbcType="VARCHAR" property="platValid" />
+    <result column="apply_dept" jdbcType="VARCHAR" property="applyDept" />
+    <result column="apply_employ" jdbcType="VARCHAR" property="applyEmploy" />
+    <result column="draw_type" jdbcType="VARCHAR" property="drawType" />
+    <result column="draw_other" jdbcType="VARCHAR" property="drawOther" />
+    <result column="draw_data" jdbcType="VARCHAR" property="drawData" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    model_id, material_name, material_id, draw_id, version_id, share_info, update_reason, 
+    plat_valid, apply_dept, apply_employ, draw_type, draw_other, draw_data
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from flow_system.dcc_plat_data
+    where model_id = #{modelId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPlatData" resultMap="BaseResultMap"
+          parameterType="com.xpwi.springboot.model.PlatData">
+    select * from flow_system.dcc_plat_data
+    <where>
+      <if test="modelId">
+        model_id=#{modelId}
+      </if>
+      <if test="materialId">
+        material_id=#{materialId}
+      </if>
+      <if test="drawId">
+        draw_id=#{drawId}
+      </if>
+      <if test="versionId">
+        version_id=#{versionId}
+      </if>
+      <if test="platValid">
+        plat_valid=#{platValid}
+      </if>
+      <if test="materialName">
+        material_name=#{materialName}
+      </if>
+    </where>
+  </select>
+
+    <select id="selectAllByDrawTypeAndModelIdLikeAndDrawIdLikeAndDrawOtherLike"
+            resultMap="BaseResultMap">
+        select  model_id , material_name , material_id ,draw_id ,version_id ,share_info , update_reason
+        from flow_system.dcc_plat_data dpd
+
+        <where>
+          <if test="1==1">
+            plat_valid  = 'Y'
+          </if>
+          <if test="drawType!=null and drawType!=''">
+            and draw_type = #{drawType}
+          </if>
+          <if test="modelId!=null and modelId!=''">
+            and model_id like #{modelId}
+          </if>
+          <if test="drawId!=null and drawId!=''">
+            and draw_id like #{drawId}
+          </if>
+          <if test="drawOther !=null and drawOther!='' ">
+            and draw_other like #{drawOther}
+          </if>
+        </where>
+        order by model_id,draw_id
+    </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from flow_system.dcc_plat_data
+    where model_id = #{modelId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" keyColumn="model_id" keyProperty="modelId" parameterType="com.xpwi.springboot.model.PlatData" useGeneratedKeys="true">
+    insert into flow_system.dcc_plat_data (material_name, material_id, draw_id, 
+      version_id, share_info, update_reason, 
+      plat_valid, apply_dept, apply_employ, 
+      draw_type, draw_other, draw_data
+      )
+    values (#{materialName,jdbcType=VARCHAR}, #{materialId,jdbcType=VARCHAR}, #{drawId,jdbcType=VARCHAR}, 
+      #{versionId,jdbcType=VARCHAR}, #{shareInfo,jdbcType=VARCHAR}, #{updateReason,jdbcType=VARCHAR}, 
+      #{platValid,jdbcType=VARCHAR}, #{applyDept,jdbcType=VARCHAR}, #{applyEmploy,jdbcType=VARCHAR}, 
+      #{drawType,jdbcType=VARCHAR}, #{drawOther,jdbcType=VARCHAR}, #{drawData,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="model_id" keyProperty="modelId" parameterType="com.xpwi.springboot.model.PlatData" useGeneratedKeys="true">
+    insert into flow_system.dcc_plat_data
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="modelId != null">
+        model_id,
+      </if>
+      <if test="materialName != null">
+        material_name,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="drawId != null">
+        draw_id,
+      </if>
+      <if test="versionId != null">
+        version_id,
+      </if>
+      <if test="shareInfo != null">
+        share_info,
+      </if>
+      <if test="updateReason != null">
+        update_reason,
+      </if>
+      <if test="platValid != null">
+        plat_valid,
+      </if>
+      <if test="applyDept != null">
+        apply_dept,
+      </if>
+      <if test="applyEmploy != null">
+        apply_employ,
+      </if>
+      <if test="drawType != null">
+        draw_type,
+      </if>
+      <if test="drawOther != null">
+        draw_other,
+      </if>
+      <if test="drawData != null">
+        draw_data,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="modelId != null">
+        #{modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=VARCHAR},
+      </if>
+      <if test="drawId != null">
+        #{drawId,jdbcType=VARCHAR},
+      </if>
+      <if test="versionId != null">
+        #{versionId,jdbcType=VARCHAR},
+      </if>
+      <if test="shareInfo != null">
+        #{shareInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateReason != null">
+        #{updateReason,jdbcType=VARCHAR},
+      </if>
+      <if test="platValid != null">
+        #{platValid,jdbcType=VARCHAR},
+      </if>
+      <if test="applyDept != null">
+        #{applyDept,jdbcType=VARCHAR},
+      </if>
+      <if test="applyEmploy != null">
+        #{applyEmploy,jdbcType=VARCHAR},
+      </if>
+      <if test="drawType != null">
+        #{drawType,jdbcType=VARCHAR},
+      </if>
+      <if test="drawOther != null">
+        #{drawOther,jdbcType=VARCHAR},
+      </if>
+      <if test="drawData != null">
+        #{drawData,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xpwi.springboot.model.PlatData">
+    update flow_system.dcc_plat_data
+    <set>
+      <if test="materialName != null">
+        material_name = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        material_name = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=VARCHAR},
+      </if>
+      <if test="drawId != null">
+        draw_id = #{drawId,jdbcType=VARCHAR},
+      </if>
+      <if test="versionId != null">
+        version_id = #{versionId,jdbcType=VARCHAR},
+      </if>
+      <if test="shareInfo != null">
+        share_info = #{shareInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateReason != null">
+        update_reason = #{updateReason,jdbcType=VARCHAR},
+      </if>
+      <if test="platValid != null">
+        plat_valid = #{platValid,jdbcType=VARCHAR},
+      </if>
+      <if test="applyDept != null">
+        apply_dept = #{applyDept,jdbcType=VARCHAR},
+      </if>
+      <if test="applyEmploy != null">
+        apply_employ = #{applyEmploy,jdbcType=VARCHAR},
+      </if>
+      <if test="drawType != null">
+        draw_type = #{drawType,jdbcType=VARCHAR},
+      </if>
+      <if test="drawOther != null">
+        draw_other = #{drawOther,jdbcType=VARCHAR},
+      </if>
+      <if test="drawData != null">
+        draw_data = #{drawData,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where model_id = #{modelId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xpwi.springboot.model.PlatData">
+    update flow_system.dcc_plat_data
+    set material_name = #{materialName,jdbcType=VARCHAR},
+      material_id = #{materialId,jdbcType=VARCHAR},
+      draw_id = #{drawId,jdbcType=VARCHAR},
+      version_id = #{versionId,jdbcType=VARCHAR},
+      share_info = #{shareInfo,jdbcType=VARCHAR},
+      update_reason = #{updateReason,jdbcType=VARCHAR},
+      plat_valid = #{platValid,jdbcType=VARCHAR},
+      apply_dept = #{applyDept,jdbcType=VARCHAR},
+      apply_employ = #{applyEmploy,jdbcType=VARCHAR},
+      draw_type = #{drawType,jdbcType=VARCHAR},
+      draw_other = #{drawOther,jdbcType=VARCHAR},
+      draw_data = #{drawData,jdbcType=VARCHAR}
+    where model_id = #{modelId,jdbcType=VARCHAR}
+  </update>
+  <update id="updatePlatValidAndUpdateReason">
+    update  flow_system.dcc_plat_data set plat_valid = 'N' , update_reason = #{updateReason}
+    <where>
+      <if test="1 = 1">
+        plat_valid = 'Y'
+      </if>
+      <if test="modelId!=null">
+        and model_id = #{modelId}
+      </if>
+      <if test="drawId!=null">
+        and draw_id = #{drawId}
+      </if>
+      <if test="modelId!=null">
+        and version_id = #{versionId}
+      </if>
+      <if test="modelId!=null">
+        and material_name = #{materialName}
+      </if>
+      <if test="drawType!=null">
+        and draw_type = #{drawType}
+      </if>
+    </where>
+  </update>
+</mapper>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.FlowHisSignoffDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.FlowHisSignoff">
+    <result column="form_id" jdbcType="VARCHAR" property="form_id" />
+    <result column="stage" jdbcType="VARCHAR" property="stage" />
+    <result column="department_id" jdbcType="VARCHAR" property="department_id" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="create_user_id" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="create_user_name" />
+    <result column="rej06" jdbcType="VARCHAR" property="rej06" />
+    <result column="information" jdbcType="VARCHAR" property="information" />
+    <result column="create_date" jdbcType="VARCHAR" property="create_date" />
+    <result column="rej09" jdbcType="VARCHAR" property="rej09" />
+    <result column="rej10" jdbcType="VARCHAR" property="rej10" />
+  </resultMap>
+
+
+  <insert id="insert"  parameterType="com.xpwi.springboot.model.FlowHisSignoff" >
+    insert into flow_system.flow_his_signoff (form_id,stage, department_id, create_user_id,
+      create_user_name, rej06, information, 
+      create_date, rej09, rej10
+      )
+    values (#{form_id},#{stage,jdbcType=VARCHAR}, #{department_id,jdbcType=VARCHAR}, #{create_user_id,jdbcType=VARCHAR},
+      #{create_user_name,jdbcType=VARCHAR}, #{rej06,jdbcType=VARCHAR}, #{information,jdbcType=VARCHAR},
+      #{create_date,jdbcType=VARCHAR}, #{rej09,jdbcType=VARCHAR}, #{rej10,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective"  parameterType="com.xpwi.springboot.model.FlowHisSignoff" >
+    insert into flow_system.flow_his_signoff
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="stage != null">
+        stage,
+      </if>
+      <if test="department_id != null">
+        department_id,
+      </if>
+      <if test="create_user_id != null">
+        create_user_id,
+      </if>
+      <if test="create_user_name != null">
+        create_user_name,
+      </if>
+      <if test="rej06 != null">
+        rej06,
+      </if>
+      <if test="information != null">
+        information,
+      </if>
+      <if test="create_date != null">
+        create_date,
+      </if>
+      <if test="rej09 != null">
+        rej09,
+      </if>
+      <if test="rej10 != null">
+        rej10,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="stage != null">
+        #{stage,jdbcType=VARCHAR},
+      </if>
+      <if test="department_id != null">
+        #{department_id,jdbcType=VARCHAR},
+      </if>
+      <if test="create_user_id != null">
+        #{create_user_id,jdbcType=VARCHAR},
+      </if>
+      <if test="create_user_name != null">
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="rej06 != null">
+        #{rej06,jdbcType=VARCHAR},
+      </if>
+      <if test="information != null">
+        #{information,jdbcType=VARCHAR},
+      </if>
+      <if test="create_date != null">
+        #{create_date,jdbcType=VARCHAR},
+      </if>
+      <if test="rej09 != null">
+        #{rej09,jdbcType=VARCHAR},
+      </if>
+      <if test="rej10 != null">
+        #{rej10,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateFlowHisSignoff">
+    update flow_system.flow_his_signoff
+    <set>
+      <if test="stage != null">
+        stage =  #{stage,jdbcType=VARCHAR},
+      </if>
+      <if test="stage != null">
+        stage =  #{stage,jdbcType=VARCHAR},
+      </if>
+      <if test="department_id != null">
+        department_id = #{department_id,jdbcType=VARCHAR},
+      </if>
+      <if test="create_user_id != null">
+        create_user_id = #{create_user_id,jdbcType=VARCHAR},
+      </if>
+      <if test="create_user_name != null">
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="rej06 != null">
+        rej06 = #{rej06,jdbcType=VARCHAR},
+      </if>
+      <if test="information != null">
+        information =  #{information,jdbcType=VARCHAR},
+      </if>
+      <if test="create_date != null">
+        create_date =now(),
+      </if>
+      <if test="rej09 != null">
+        rej09 = #{rej09,jdbcType=VARCHAR},
+      </if>
+      <if test="rej10 != null">
+        rej10 =  #{rej10,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where form_id=#{form_id}
+  </update>
+  <select id="selectAllByFormIdAndStage" parameterType="com.xpwi.springboot.model.FlowHisSignoff" resultMap="BaseResultMap">
+    select * from flow_system.flow_his_signoff
+    <where>
+      <if test="form_id !=null and form_id !=''">
+      form_id  = #{form_id}
+    </if>
+      <if test="stage!=null">
+       and  stage  = #{stage}
+      </if>
+    </where>
+  </select>
+<select id="selectAllByHisSingoff"  resultType="com.xpwi.springboot.model.FlowHisSignoff">
+      select * from flow_system.flow_his_signoff
+      <where>
+        <if test="form_id!=null">
+          form_id  = #{form_id}
+        </if>
+        <if test="stage!=null">
+          stage  = #{stage}
+        </if>
+      </where>
+    </select>
+  <select id="selectAllByFormId" resultType="com.xpwi.springboot.model.FlowHisSignoff">
+    select * from flow_system.flow_his_signoff
+    where form_id  = #{form_id}
+  </select>
+  <select id="selectAllByFormIdList" resultType="com.xpwi.springboot.model.FlowHisSignoff" parameterType="java.lang.String">
+     select * from flow_system.flow_his_signoff
+    where form_id  = #{form_id}
+  </select>
+  <select id="selectAllByFormIdAnd" resultType="java.util.Map">
+    select form_id,stage,a.department_id,create_user_id,create_user_name,email from flow_system.flow_his_signoff a,flow_system.flow_dsd_user b
+    where  form_id= #{formId} and rej09 = 'N' and user_id = create_user_id and stage = '10' and rej10 = 'N'
+  </select>
+  <select id="selectUnionUser" resultType="java.util.Map">
+    select form_id,stage,a.department_id,create_user_id,create_user_name,email from flow_system.flow_his_signoff a,flow_system.flow_dsd_user b
+    where  form_id= #{formId} and rej09 = 'N' and user_id = create_user_id and rej10 = 'N'
+  </select>
+</mapper>

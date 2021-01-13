@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.FlowAgentDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.FlowAgent">
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="udepartment_id" jdbcType="VARCHAR" property="udepartmentId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="ddepartment_id" jdbcType="VARCHAR" property="ddepartmentId" />
+    <result column="duser_id" jdbcType="VARCHAR" property="duserId" />
+    <result column="duser_name" jdbcType="VARCHAR" property="duserName" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <result column="ent09" jdbcType="VARCHAR" property="ent09" />
+    <result column="flag" jdbcType="VARCHAR" property="flag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, udepartment_id, user_name, ddepartment_id, duser_id, duser_name, start_time, 
+    end_time, ent09, flag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from "flow_agent"
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAllByUserIdAndFlagLeftJsonBakUser" resultType="java.util.Map">
+      select a.ddepartment_id ,a.duser_id ,a.user_name,a.ent09 ,b.email from flow_system.flow_agent a
+      left join flow_system.flow_dsd_user b on a.duser_id  = b.user_id
+      where a.user_id =#{userId} and a.flag = 'Y' and  a.start_time &lt; #{dateStr} and a.end_time &gt; #{dateStr}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from "flow_agent"
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" keyColumn="user_id" keyProperty="userId" parameterType="com.xpwi.springboot.model.FlowAgent" useGeneratedKeys="true">
+    insert into "flow_agent" (udepartment_id, user_name, ddepartment_id, 
+      duser_id, duser_name, start_time, 
+      end_time, ent09, flag
+      )
+    values (#{udepartmentId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{ddepartmentId,jdbcType=VARCHAR}, 
+      #{duserId,jdbcType=VARCHAR}, #{duserName,jdbcType=VARCHAR}, #{startTime,jdbcType=VARCHAR}, 
+      #{endTime,jdbcType=VARCHAR}, #{ent09,jdbcType=VARCHAR}, #{flag,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="user_id" keyProperty="userId" parameterType="com.xpwi.springboot.model.FlowAgent" useGeneratedKeys="true">
+    insert into "flow_agent"
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="udepartmentId != null">
+        udepartment_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="ddepartmentId != null">
+        ddepartment_id,
+      </if>
+      <if test="duserId != null">
+        duser_id,
+      </if>
+      <if test="duserName != null">
+        duser_name,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="ent09 != null">
+        ent09,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="udepartmentId != null">
+        #{udepartmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="ddepartmentId != null">
+        #{ddepartmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="duserId != null">
+        #{duserId,jdbcType=VARCHAR},
+      </if>
+      <if test="duserName != null">
+        #{duserName,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ent09 != null">
+        #{ent09,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xpwi.springboot.model.FlowAgent">
+    update "flow_agent"
+    <set>
+      <if test="udepartmentId != null">
+        udepartment_id = #{udepartmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="ddepartmentId != null">
+        ddepartment_id = #{ddepartmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="duserId != null">
+        duser_id = #{duserId,jdbcType=VARCHAR},
+      </if>
+      <if test="duserName != null">
+        duser_name = #{duserName,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ent09 != null">
+        ent09 = #{ent09,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        flag = #{flag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xpwi.springboot.model.FlowAgent">
+    update "flow_agent"
+    set udepartment_id = #{udepartmentId,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      ddepartment_id = #{ddepartmentId,jdbcType=VARCHAR},
+      duser_id = #{duserId,jdbcType=VARCHAR},
+      duser_name = #{duserName,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      ent09 = #{ent09,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </update>
+</mapper>

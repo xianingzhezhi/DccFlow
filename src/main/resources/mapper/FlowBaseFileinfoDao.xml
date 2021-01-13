@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.FlowBaseFileinfoDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.FlowBaseFileinfo">
+    <result column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="form_head" jdbcType="VARCHAR" property="formHead" />
+    <result column="count" jdbcType="VARCHAR" property="count" />
+    <result column="file_up_name" jdbcType="VARCHAR" property="fileUpName" />
+    <result column="file_sys_name" jdbcType="VARCHAR" property="fileSysName" />
+    <result column="file_only_code" jdbcType="VARCHAR" property="fileOnlyCode" />
+    <result column="file_contentlength" jdbcType="VARCHAR" property="fileContentlength" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select max(count) count
+    from flow_system.flow_base_fileinfo
+    where form_id = #{form_id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAllByFormId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select *
+    from flow_system.flow_base_fileinfo
+    where form_id = #{form_id,jdbcType=VARCHAR}
+  </select>
+
+    <insert id="insert" parameterType="com.xpwi.springboot.model.FlowBaseFileinfo">
+    insert into flow_system.flow_base_fileinfo (form_id, form_head, "count", 
+      file_up_name, file_sys_name, file_only_code, 
+      file_contentlength, user_id, create_date
+      )
+    values (#{formId,jdbcType=VARCHAR}, #{formHead,jdbcType=VARCHAR}, #{count,jdbcType=VARCHAR}, 
+      #{fileUpName,jdbcType=VARCHAR}, #{fileSysName,jdbcType=VARCHAR}, #{fileOnlyCode,jdbcType=VARCHAR}, 
+      #{fileContentlength,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xpwi.springboot.model.FlowBaseFileinfo">
+    insert into flow_system.flow_base_fileinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        form_id,
+      </if>
+      <if test="formHead != null">
+        form_head,
+      </if>
+      <if test="count != null">
+        "count",
+      </if>
+      <if test="fileUpName != null">
+        file_up_name,
+      </if>
+      <if test="fileSysName != null">
+        file_sys_name,
+      </if>
+      <if test="fileOnlyCode != null">
+        file_only_code,
+      </if>
+      <if test="fileContentlength != null">
+        file_contentlength,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        #{formId,jdbcType=VARCHAR},
+      </if>
+      <if test="formHead != null">
+        #{formHead,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null">
+        #{count,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUpName != null">
+        #{fileUpName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSysName != null">
+        #{fileSysName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileOnlyCode != null">
+        #{fileOnlyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fileContentlength != null">
+        #{fileContentlength,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

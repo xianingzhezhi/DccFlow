@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.FlowBaseUserDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.FlowBaseUser">
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <id column="user_type" jdbcType="VARCHAR" property="userType" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="user_roles" jdbcType="VARCHAR" property="userRoles" />
+    <result column="flag" jdbcType="VARCHAR" property="flag" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="mail" jdbcType="VARCHAR" property="mail" />
+    <result column="is_mail" jdbcType="VARCHAR" property="isMail" />
+    <result column="user_urls" jdbcType="VARCHAR" property="userUrls" />
+    <result column="rank" jdbcType="VARCHAR" property="rank" />
+    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, user_type, user_name, create_date, create_user, user_roles, flag, salt, 
+    mail, is_mail, user_urls, "rank", department_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.xpwi.springboot.model.FlowBaseUserKey" resultMap="BaseResultMap">
+      select  a.user_id, a.user_type,
+      case when a.user_name is null then b.user_name else a.user_name end user_name,
+      a.create_date, a.create_user, a.user_roles, a.flag, a.salt,
+          b.email mail, a.is_mail, a.user_urls, a."rank", b.department_id
+      from flow_system.flow_base_user A
+      left join flow_system.flow_dsd_user b on a.user_id  = b.user_id
+      where a.user_id = #{userId,jdbcType=VARCHAR}
+        and a.user_type = #{userType,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKeyLeftJoindept" parameterType="com.xpwi.springboot.model.FlowBaseUserKey" resultType="java.util.Map">
+    select a.user_id,b.user_name ,b.department_id ,c.department_name ,a.user_roles ,a.user_type ,a.is_mail
+    from flow_system.flow_base_user a
+    left join flow_system.flow_dsd_user b on a.user_id  = b.user_id
+    left join flow_system.flow_base_dept c on b.department_id  = c.department_id
+    where a.user_id = #{userId,jdbcType=VARCHAR}
+    and a.user_type = #{userType,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAllByUserId" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from flow_system.flow_base_user
+       where user_id = #{userId}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="com.xpwi.springboot.model.FlowBaseUserKey">
+    delete from flow_system.flow_base_user
+    where user_id = #{userId,jdbcType=VARCHAR}
+      and user_type = #{userType,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" keyColumn="user_id" keyProperty="userId" parameterType="com.xpwi.springboot.model.FlowBaseUser" useGeneratedKeys="true">
+    insert into flow_system.flow_base_user (user_type, user_name, create_date,
+      create_user, user_roles, flag, 
+      salt, mail, is_mail, 
+      user_urls, "rank", department_id
+      )
+    values (#{userType,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=VARCHAR}, #{userRoles,jdbcType=VARCHAR}, #{flag,jdbcType=VARCHAR}, 
+      #{salt,jdbcType=VARCHAR}, #{mail,jdbcType=VARCHAR}, #{isMail,jdbcType=VARCHAR}, 
+      #{userUrls,jdbcType=VARCHAR}, #{rank,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="user_id" keyProperty="userId" parameterType="com.xpwi.springboot.model.FlowBaseUser" useGeneratedKeys="true">
+    insert into flow_system.flow_base_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userType != null">
+        user_type,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="userRoles != null">
+        user_roles,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+      <if test="salt != null">
+        salt,
+      </if>
+      <if test="mail != null">
+        mail,
+      </if>
+      <if test="isMail != null">
+        is_mail,
+      </if>
+      <if test="userUrls != null">
+        user_urls,
+      </if>
+      <if test="rank != null">
+        "rank",
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userType != null">
+        #{userType,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="userRoles != null">
+        #{userRoles,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null">
+        #{mail,jdbcType=VARCHAR},
+      </if>
+      <if test="isMail != null">
+        #{isMail,jdbcType=VARCHAR},
+      </if>
+      <if test="userUrls != null">
+        #{userUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null">
+        #{rank,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <insert id="initDccUser">
+    insert into flow_system.flow_base_user
+    (user_id,user_name,create_date,create_user,user_roles,user_type,flag,mail,is_mail)
+    select user_id,user_name ,now(),'system','ISO01,ISO02','dcc','Y', email , 'Y'
+    from flow_system.flow_dsd_user bu where user_id  = #{userId}
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xpwi.springboot.model.FlowBaseUser">
+    update flow_system.flow_base_user
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="userRoles != null">
+        user_roles = #{userRoles,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        flag = #{flag,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null">
+        mail = #{mail,jdbcType=VARCHAR},
+      </if>
+      <if test="isMail != null">
+        is_mail = #{isMail,jdbcType=VARCHAR},
+      </if>
+      <if test="userUrls != null">
+        user_urls = #{userUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null">
+        "rank" = #{rank,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        department_id = #{departmentId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=VARCHAR}
+      and user_type = #{userType,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xpwi.springboot.model.FlowBaseUser">
+    update flow_system.flow_base_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      user_roles = #{userRoles,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      mail = #{mail,jdbcType=VARCHAR},
+      is_mail = #{isMail,jdbcType=VARCHAR},
+      user_urls = #{userUrls,jdbcType=VARCHAR},
+      "rank" = #{rank,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=VARCHAR}
+      and user_type = #{userType,jdbcType=VARCHAR}
+  </update>
+</mapper>

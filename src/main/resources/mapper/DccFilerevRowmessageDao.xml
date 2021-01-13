@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.DccFilerevRowmessageDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.DccFilerevRowmessage">
+    <result column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="file_vek" jdbcType="VARCHAR" property="fileVek" />
+    <result column="file_user" jdbcType="VARCHAR" property="fileUser" />
+    <result column="file_flag" jdbcType="VARCHAR" property="fileFlag" />
+    <result column="file_mark" jdbcType="VARCHAR" property="fileMark" />
+    <result column="file_date" jdbcType="VARCHAR" property="fileDate" />
+    <result column="file_bie" jdbcType="VARCHAR" property="fileBie" />
+  </resultMap>
+  <insert id="insert" parameterType="com.xpwi.springboot.model.DccFilerevRowmessage">
+    insert into flow_system.dcc_filerev_rowmessage (form_id, file_name, file_id,
+      file_vek, file_user, file_flag, 
+      file_mark, file_date, file_bie
+      )
+    values (#{formId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{fileId,jdbcType=VARCHAR}, 
+      #{fileVek,jdbcType=VARCHAR}, #{fileUser,jdbcType=VARCHAR}, #{fileFlag,jdbcType=VARCHAR}, 
+      #{fileMark,jdbcType=VARCHAR}, #{fileDate,jdbcType=VARCHAR}, #{fileBie,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xpwi.springboot.model.DccFilerevRowmessage">
+    insert into flow_system.dcc_filerev_rowmessage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        form_id,
+      </if>
+      <if test="fileName != null">
+        file_name,
+      </if>
+      <if test="fileId != null">
+        file_id,
+      </if>
+      <if test="fileVek != null">
+        file_vek,
+      </if>
+      <if test="fileUser != null">
+        file_user,
+      </if>
+      <if test="fileFlag != null">
+        file_flag,
+      </if>
+      <if test="fileMark != null">
+        file_mark,
+      </if>
+      <if test="fileDate != null">
+        file_date,
+      </if>
+      <if test="fileBie != null">
+        file_bie,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        #{formId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null">
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileVek != null">
+        #{fileVek,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUser != null">
+        #{fileUser,jdbcType=VARCHAR},
+      </if>
+      <if test="fileFlag != null">
+        #{fileFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="fileMark != null">
+        #{fileMark,jdbcType=VARCHAR},
+      </if>
+      <if test="fileDate != null">
+        #{fileDate,jdbcType=VARCHAR},
+      </if>
+      <if test="fileBie != null">
+        #{fileBie,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+    <delete id="deleteByFormId"  >
+      DELETE FROM flow_system.dcc_filerev_rowmessage
+       WHERE form_id=#{formId}
+    </delete>
+    <select id="selectAll" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+      select *  FROM flow_system.dcc_filerev_rowmessage
+      WHERE form_id=#{formId}
+    </select>
+</mapper>

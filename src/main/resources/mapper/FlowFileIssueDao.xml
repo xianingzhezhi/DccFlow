@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.FlowFileIssueDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.FlowFileIssue">
+    <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="version" jdbcType="VARCHAR" property="version" />
+    <result column="file_date" jdbcType="VARCHAR" property="fileDate" />
+    <result column="setunit" jdbcType="VARCHAR" property="setunit" />
+    <result column="pages" jdbcType="VARCHAR" property="pages" />
+    <result column="sue07" jdbcType="VARCHAR" property="sue07" />
+    <result column="update_date" jdbcType="VARCHAR" property="updateDate" />
+    <result column="flag" jdbcType="VARCHAR" property="flag" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <insert id="insert" parameterType="com.xpwi.springboot.model.FlowFileIssue">
+    insert into "flow_file_issue" (file_id, file_name, version, 
+      file_date, setunit, pages, 
+      sue07, update_date, flag, 
+      remark)
+    values (#{fileId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, 
+      #{fileDate,jdbcType=VARCHAR}, #{setunit,jdbcType=VARCHAR}, #{pages,jdbcType=VARCHAR}, 
+      #{sue07,jdbcType=VARCHAR}, #{updateDate,jdbcType=VARCHAR}, #{flag,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xpwi.springboot.model.FlowFileIssue">
+    insert into "flow_file_issue"
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fileId != null">
+        file_id,
+      </if>
+      <if test="fileName != null">
+        file_name,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="fileDate != null">
+        file_date,
+      </if>
+      <if test="setunit != null">
+        setunit,
+      </if>
+      <if test="pages != null">
+        pages,
+      </if>
+      <if test="sue07 != null">
+        sue07,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fileId != null">
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="fileDate != null">
+        #{fileDate,jdbcType=VARCHAR},
+      </if>
+      <if test="setunit != null">
+        #{setunit,jdbcType=VARCHAR},
+      </if>
+      <if test="pages != null">
+        #{pages,jdbcType=VARCHAR},
+      </if>
+      <if test="sue07 != null">
+        #{sue07,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.xpwi.springboot.model.FlowFileIssue">
+    update flow_system.flow_file_issue set flag='0'
+    <where>
+      <if test="fileId!=null and fileId!=''" >
+        file_id=#{fileId}
+      </if>
+      <if test=" version !=null and version!=''" >
+        and version=#{version}
+      </if>
+      <if test="setunit != null">
+        and setunit=#{setunit}
+      </if>
+      and flag='2'
+    </where>
+
+  </update>
+  <select id="selectByFileId" resultMap="BaseResultMap">
+      select distinct setunit from flow_system.flow_file_issue
+      <where>
+        <if test="fileId!=null and fileId!=''" >
+          file_id=#{fileId}
+        </if>
+        <if test=" version !=null and version!=''" >
+          version=#{version}
+        </if>
+      </where>
+    </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select * from  flow_system.flow_file_issue
+    <where>
+      <if test="fileId!=null and fileId!=''" >
+        file_id=#{fileId}
+      </if>
+      <if test=" version !=null and version!=''" >
+        and version=#{version}
+      </if>
+      <if test="setunit != null">
+       and setunit=#{setunit},
+      </if>
+      and flag='2'
+    </where>
+  </select>
+</mapper>

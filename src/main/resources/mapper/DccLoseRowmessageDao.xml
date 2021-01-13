@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.DccLoseRowmessageDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.DccLoseRowmessage">
+    <result column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="form_line" jdbcType="VARCHAR" property="formLine" />
+    <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="file_versin" jdbcType="VARCHAR" property="fileVersin" />
+    <result column="file_part" jdbcType="VARCHAR" property="filePart" />
+    <result column="lose_mark" jdbcType="VARCHAR" property="loseMark" />
+  </resultMap>
+  <insert id="insert" parameterType="com.xpwi.springboot.model.DccLoseRowmessage">
+    insert into flow_system.dcc_lose_rowmessage (form_id, form_line, file_id,
+      file_name, file_versin, file_part, 
+      lose_mark)
+    values (#{formId,jdbcType=VARCHAR}, #{formLine,jdbcType=VARCHAR}, #{fileId,jdbcType=VARCHAR}, 
+      #{fileName,jdbcType=VARCHAR}, #{fileVersin,jdbcType=VARCHAR}, #{filePart,jdbcType=VARCHAR}, 
+      #{loseMark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xpwi.springboot.model.DccLoseRowmessage">
+    insert into flow_system.dcc_lose_rowmessage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        form_id,
+      </if>
+      <if test="formLine != null">
+        form_line,
+      </if>
+      <if test="fileId != null">
+        file_id,
+      </if>
+      <if test="fileName != null">
+        file_name,
+      </if>
+      <if test="fileVersin != null">
+        file_versin,
+      </if>
+      <if test="filePart != null">
+        file_part,
+      </if>
+      <if test="loseMark != null">
+        lose_mark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        #{formId,jdbcType=VARCHAR},
+      </if>
+      <if test="formLine != null">
+        #{formLine,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null">
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileVersin != null">
+        #{fileVersin,jdbcType=VARCHAR},
+      </if>
+      <if test="filePart != null">
+        #{filePart,jdbcType=VARCHAR},
+      </if>
+      <if test="loseMark != null">
+        #{loseMark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <delete id="delete" parameterType="java.lang.String">
+    delete from flow_system.dcc_lose_rowmessage where form_id=#{form_id}
+  </delete>
+  <select id="selectAllByDccLoseRowmessage" resultMap="BaseResultMap">
+   select *  from flow_system.dcc_lose_rowmessage
+   <where>
+     <if test="formId != null and formId != ''">
+       form_id=#{formId}
+     </if>
+   </where>
+  </select>
+
+</mapper>

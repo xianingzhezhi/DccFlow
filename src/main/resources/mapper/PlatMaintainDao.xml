@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.PlatMaintainDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.PlatMaintain">
+    <result column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="apply_date" jdbcType="TIMESTAMP" property="applyDate" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="draw_type" jdbcType="VARCHAR" property="drawType" />
+    <result column="draw_other" jdbcType="VARCHAR" property="drawOther" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="form_type" jdbcType="VARCHAR" property="formType" />
+    <result column="form_state" jdbcType="VARCHAR" property="formState" />
+    <result column="operator_id" jdbcType="VARCHAR" property="operatorId" />
+  </resultMap>
+  <select id="selectAllByFormIdAfter" resultType="com.xpwi.springboot.model.PlatMaintain" parameterType="java.lang.String">
+    SELECT *  FROM flow_system.dcc_plat_maintain
+    <where>
+      <if test="formId !=null and formId != ''">
+        form_id=#{formId}
+      </if>
+    </where>
+  </select>
+  <select id="selectAllByFormId" resultMap="BaseResultMap" resultType="com.xpwi.springboot.model.PlatMaintain">
+      SELECT *  FROM flow_system.dcc_plat_maintain
+      <where>
+        <if test="formId !=null and formId != ''">
+          form_id=#{formId}
+        </if>
+      </where>
+
+    </select>
+  <select id="selectAllByFormIdAndStage" resultMap="BaseResultMap" resultType="com.xpwi.springboot.model.PlatMaintain">
+    SELECT *  FROM flow_system.dcc_plat_maintain
+    where form_id=#{formId} and form_state = '1'
+
+  </select>
+    <insert id="insert" parameterType="com.xpwi.springboot.model.PlatMaintain">
+    insert into flow_system.dcc_plat_maintain (form_id, apply_date, create_user_id,
+      create_user, department_id, department_name, 
+      draw_type, draw_other, remark, 
+      form_type, form_state, operator_id
+      )
+    values (#{formId,jdbcType=VARCHAR}, now(), #{createUserId,jdbcType=VARCHAR},
+      #{createUser,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, 
+      #{drawType,jdbcType=VARCHAR}, #{drawOther,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{formType,jdbcType=VARCHAR}, #{formState,jdbcType=VARCHAR}, #{operatorId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xpwi.springboot.model.PlatMaintain">
+    insert into flow_system.dcc_plat_maintain
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        form_id,
+      </if>
+      <if test="applyDate != null">
+        apply_date,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="departmentName != null">
+        department_name,
+      </if>
+      <if test="drawType != null">
+        draw_type,
+      </if>
+      <if test="drawOther != null">
+        draw_other,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="formType != null">
+        form_type,
+      </if>
+      <if test="formState != null">
+        form_state,
+      </if>
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        #{formId,jdbcType=VARCHAR},
+      </if>
+      <if test="applyDate != null">
+        #{applyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentName != null">
+        #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="drawType != null">
+        #{drawType,jdbcType=VARCHAR},
+      </if>
+      <if test="drawOther != null">
+        #{drawOther,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="formType != null">
+        #{formType,jdbcType=VARCHAR},
+      </if>
+      <if test="formState != null">
+        #{formState,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.xpwi.springboot.model.PlatMaintain">
+    update  flow_system.dcc_plat_maintain
+    <set>
+      <if test="1==1">
+        apply_date = now(),
+      </if>
+      <if test="createUserId != null">
+       create_user_id =  #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        department_id  =  #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentName != null">
+        department_name  = #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="drawType != null">
+        draw_type  = #{drawType,jdbcType=VARCHAR},
+      </if>
+      <if test="drawOther != null">
+        draw_other = #{drawOther,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark  = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="formType != null">
+        form_type =  #{formType,jdbcType=VARCHAR},
+      </if>
+      <if test="formState != null">
+        form_state = #{formState,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where form_id=#{formId}
+  </update>
+  <update id="updateFormStateByFormId">
+    update flow_system.dcc_plat_maintain set  form_state = '2'  where form_id  = #{formId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateFormStateByFormIdToTarget">
+    update flow_system.dcc_plat_maintain set  form_state = #{state}  where form_id  = #{formId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPlatMaintain" resultMap="BaseResultMap">
+    select * from flow_system.dcc_plat_maintain
+    <where>
+      <if test="formId != null">
+        form_id = #{formId}
+      </if>
+      <if test="formState != null">
+        and form_state = #{formState}
+      </if>
+    </where>
+  </select>
+  <select id="selectByFormIdAndUserId" resultType="java.lang.String">
+select operator_id from (select create_user_id operator_id from flow_system.dcc_plat_maintain where form_id = #{form_id}
+                 union select user_id operator_id from flow_system.flow_base_signoff  where form_id = #{form_id} and state = '10'
+                 union select operator_id operator_id  from flow_system.dcc_plat_maintain where form_id = #{form_id}) a
+                 where a.operator_id  = #{user_id}
+
+  </select>
+    <select id="selectByFormIdAndUserIdAndState" resultType="com.xpwi.springboot.model.FormTrackVO">
+
+      select form_id,(case when draw_type = 'A' then '機構圖'
+                            when draw_type = 'B' then '電路圖'
+                             when draw_type = 'C' then 'IE布件圖' else '其它圖面' end) as form_name,create_user as form_employ,
+                    (case when form_type = '0' then '新增'
+                         when form_type = '1' then '變更' else '作廢' end)as form_type,
+                    (case when form_state = '0' then '開立'
+                          when form_state = '1' then '送簽中'
+                         when form_state = '2' then '結案'
+                         else '作廢' end) as form_state,apply_date as form_date
+                from flow_system.dcc_plat_maintain
+      <where>
+        <if test="state != null and state !='' ">
+          and form_state = #{state}
+        </if>
+        <if test="user_id != null and user_id != '' ">
+          and  (operator_id= #{user_id}
+          or create_user_id=#{user_id})
+        </if>
+      </where>
+    </select>
+</mapper>

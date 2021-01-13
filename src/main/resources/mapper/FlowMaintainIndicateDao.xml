@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.FlowMaintainIndicateDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.FlowMaintainIndicate">
+    <id column="no" jdbcType="VARCHAR" property="no" />
+    <result column="router_stage" jdbcType="VARCHAR" property="routerStage" />
+    <result column="jdi_user" jdbcType="VARCHAR" property="jdiUser" />
+    <result column="trans_user" jdbcType="VARCHAR" property="transUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="target" jdbcType="VARCHAR" property="target" />
+    <result column="fab" jdbcType="VARCHAR" property="fab" />
+    <result column="mo_type" jdbcType="VARCHAR" property="moType" />
+    <result column="unfold_section" jdbcType="VARCHAR" property="unfoldSection" />
+    <result column="correspond_section" jdbcType="VARCHAR" property="correspondSection" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="finish_flag" jdbcType="VARCHAR" property="finishFlag" />
+    <result column="unfold_date" jdbcType="TIMESTAMP" property="unfoldDate" />
+    <result column="unfold_pic" jdbcType="VARCHAR" property="unfoldPic" />
+    <result column="unfold_num" jdbcType="VARCHAR" property="unfoldNum" />
+    <result column="unfold_type" jdbcType="VARCHAR" property="unfoldType" />
+    <result column="unfold_cost" jdbcType="VARCHAR" property="unfoldCost" />
+    <result column="cost_date" jdbcType="TIMESTAMP" property="costDate" />
+    <result column="cost_url" jdbcType="VARCHAR" property="costUrl" />
+    <result column="customer_flag" jdbcType="VARCHAR" property="customerFlag" />
+    <result column="customer_date" jdbcType="TIMESTAMP" property="customerDate" />
+    <result column="maintain_date" jdbcType="TIMESTAMP" property="maintainDate" />
+    <result column="maintain_stage" jdbcType="VARCHAR" property="maintainStage" />
+    <result column="maintain_status" jdbcType="VARCHAR" property="maintainStatus" />
+    <result column="maintain_stage_date" jdbcType="TIMESTAMP" property="maintainStageDate" />
+    <result column="maintain_stage_url" jdbcType="VARCHAR" property="maintainStageUrl" />
+    <result column="maintain_stage_conclusion" jdbcType="VARCHAR" property="maintainStageConclusion" />
+    <result column="cost_close_date" jdbcType="TIMESTAMP" property="costCloseDate" />
+    <result column="cost_close_url" jdbcType="VARCHAR" property="costCloseUrl" />
+    <result column="cost_back_date" jdbcType="TIMESTAMP" property="costBackDate" />
+    <result column="cost_back_money" jdbcType="VARCHAR" property="costBackMoney" />
+    <result column="cost_close_money" jdbcType="VARCHAR" property="costCloseMoney" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    "no", router_stage, jdi_user, trans_user, create_date, "name", target, fab, mo_type, 
+    unfold_section, correspond_section, end_date, file_url, finish_flag, unfold_date, 
+    unfold_pic, unfold_num, unfold_type, unfold_cost, cost_date, cost_url, customer_flag, 
+    customer_date, maintain_date, maintain_stage, maintain_status, maintain_stage_date, 
+    maintain_stage_url, maintain_stage_conclusion, cost_close_date, cost_close_url, cost_back_date, 
+    cost_back_money, cost_close_money
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from "flow_maintain_indicate"
+    where "no" = #{no,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAdminSignedList" resultType="java.util.Map">
+        select t1.update_date updateDate, t2."no" formId ,t2."name" ,t2.trans_user createUser,t2.create_date createDate from (
+        select url , max(create_date) update_date  from  flow_system.flow_his_logs  where type = 'indicate_signed'
+        and  create_date > date(now()) -2
+        group by url
+        ) as t1
+        right join
+        flow_system.flow_maintain_indicate t2 on t1.url = t2.no
+        where finish_flag  = 'N'
+        order by updateDate desc  nulls last
+    </select>
+  <select id="selectRolesSignedList"  resultType="java.util.Map">
+        select t1.update_date updateDate, t2."no" formId ,t2."name" ,t2.trans_user createUser,t2.create_date createDate from (
+        select url , max(create_date) update_date  from  flow_system.flow_his_logs  where type = 'indicate_signed'
+        and  create_date > date(now()) -7
+        group by url
+        ) as t1
+        right join
+        flow_system.flow_maintain_indicate t2 on t1.url = t2.no
+        where finish_flag  = 'N'  and router_stage  in
+        <foreach  item="item" collection="array" index="index"  open="(" separator="," close=")">#{item}</foreach>
+        order by updateDate desc  nulls last
+  </select>
+  <select id="selectWriteList" resultType="java.util.Map">
+    select "no" formId ,"name" ,trans_user createUser,create_date createDate
+    from flow_system.flow_maintain_indicate where trans_user in
+    <foreach  item="item" collection="array" index="index"  open="(" separator="," close=")">#{item}</foreach>
+    order by create_date desc
+  </select>
+  <select id="selectClosedList" resultType="java.util.Map">
+    select "no" formId ,"name" ,trans_user createUser,create_date createDate
+    from flow_system.flow_maintain_indicate where finish_flag ='Y' and trans_user in
+    <foreach  item="item" collection="array" index="index"  open="(" separator="," close=")">#{item}</foreach>
+    order by create_date desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from "flow_maintain_indicate"
+    where "no" = #{no,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" keyColumn="no" keyProperty="no" parameterType="com.xpwi.springboot.model.FlowMaintainIndicate" useGeneratedKeys="true">
+    insert into "flow_maintain_indicate" (router_stage, jdi_user, trans_user, 
+      create_date, "name", target, 
+      fab, mo_type, unfold_section, 
+      correspond_section, end_date, file_url, 
+      finish_flag, unfold_date, unfold_pic, 
+      unfold_num, unfold_type, unfold_cost, 
+      cost_date, cost_url, customer_flag, 
+      customer_date, maintain_date, maintain_stage, 
+      maintain_status, maintain_stage_date, maintain_stage_url, 
+      maintain_stage_conclusion, cost_close_date, 
+      cost_close_url, cost_back_date, cost_back_money, 
+      cost_close_money)
+    values (#{routerStage,jdbcType=VARCHAR}, #{jdiUser,jdbcType=VARCHAR}, #{transUser,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, #{target,jdbcType=VARCHAR}, 
+      #{fab,jdbcType=VARCHAR}, #{moType,jdbcType=VARCHAR}, #{unfoldSection,jdbcType=VARCHAR}, 
+      #{correspondSection,jdbcType=VARCHAR}, #{endDate,jdbcType=TIMESTAMP}, #{fileUrl,jdbcType=VARCHAR}, 
+      #{finishFlag,jdbcType=VARCHAR}, #{unfoldDate,jdbcType=TIMESTAMP}, #{unfoldPic,jdbcType=VARCHAR}, 
+      #{unfoldNum,jdbcType=VARCHAR}, #{unfoldType,jdbcType=VARCHAR}, #{unfoldCost,jdbcType=VARCHAR}, 
+      #{costDate,jdbcType=TIMESTAMP}, #{costUrl,jdbcType=VARCHAR}, #{customerFlag,jdbcType=VARCHAR}, 
+      #{customerDate,jdbcType=TIMESTAMP}, #{maintainDate,jdbcType=TIMESTAMP}, #{maintainStage,jdbcType=VARCHAR}, 
+      #{maintainStatus,jdbcType=VARCHAR}, #{maintainStageDate,jdbcType=TIMESTAMP}, #{maintainStageUrl,jdbcType=VARCHAR}, 
+      #{maintainStageConclusion,jdbcType=VARCHAR}, #{costCloseDate,jdbcType=TIMESTAMP}, 
+      #{costCloseUrl,jdbcType=VARCHAR}, #{costBackDate,jdbcType=TIMESTAMP}, #{costBackMoney,jdbcType=VARCHAR}, 
+      #{costCloseMoney,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="no" keyProperty="no" parameterType="com.xpwi.springboot.model.FlowMaintainIndicate" useGeneratedKeys="true">
+    insert into "flow_maintain_indicate"
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="routerStage != null">
+        router_stage,
+      </if>
+      <if test="jdiUser != null">
+        jdi_user,
+      </if>
+      <if test="transUser != null">
+        trans_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="name != null">
+        "name",
+      </if>
+      <if test="target != null">
+        target,
+      </if>
+      <if test="fab != null">
+        fab,
+      </if>
+      <if test="moType != null">
+        mo_type,
+      </if>
+      <if test="unfoldSection != null">
+        unfold_section,
+      </if>
+      <if test="correspondSection != null">
+        correspond_section,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="fileUrl != null">
+        file_url,
+      </if>
+      <if test="finishFlag != null">
+        finish_flag,
+      </if>
+      <if test="unfoldDate != null">
+        unfold_date,
+      </if>
+      <if test="unfoldPic != null">
+        unfold_pic,
+      </if>
+      <if test="unfoldNum != null">
+        unfold_num,
+      </if>
+      <if test="unfoldType != null">
+        unfold_type,
+      </if>
+      <if test="unfoldCost != null">
+        unfold_cost,
+      </if>
+      <if test="costDate != null">
+        cost_date,
+      </if>
+      <if test="costUrl != null">
+        cost_url,
+      </if>
+      <if test="customerFlag != null">
+        customer_flag,
+      </if>
+      <if test="customerDate != null">
+        customer_date,
+      </if>
+      <if test="maintainDate != null">
+        maintain_date,
+      </if>
+      <if test="maintainStage != null">
+        maintain_stage,
+      </if>
+      <if test="maintainStatus != null">
+        maintain_status,
+      </if>
+      <if test="maintainStageDate != null">
+        maintain_stage_date,
+      </if>
+      <if test="maintainStageUrl != null">
+        maintain_stage_url,
+      </if>
+      <if test="maintainStageConclusion != null">
+        maintain_stage_conclusion,
+      </if>
+      <if test="costCloseDate != null">
+        cost_close_date,
+      </if>
+      <if test="costCloseUrl != null">
+        cost_close_url,
+      </if>
+      <if test="costBackDate != null">
+        cost_back_date,
+      </if>
+      <if test="costBackMoney != null">
+        cost_back_money,
+      </if>
+      <if test="costCloseMoney != null">
+        cost_close_money,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="routerStage != null">
+        #{routerStage,jdbcType=VARCHAR},
+      </if>
+      <if test="jdiUser != null">
+        #{jdiUser,jdbcType=VARCHAR},
+      </if>
+      <if test="transUser != null">
+        #{transUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="target != null">
+        #{target,jdbcType=VARCHAR},
+      </if>
+      <if test="fab != null">
+        #{fab,jdbcType=VARCHAR},
+      </if>
+      <if test="moType != null">
+        #{moType,jdbcType=VARCHAR},
+      </if>
+      <if test="unfoldSection != null">
+        #{unfoldSection,jdbcType=VARCHAR},
+      </if>
+      <if test="correspondSection != null">
+        #{correspondSection,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fileUrl != null">
+        #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="finishFlag != null">
+        #{finishFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="unfoldDate != null">
+        #{unfoldDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unfoldPic != null">
+        #{unfoldPic,jdbcType=VARCHAR},
+      </if>
+      <if test="unfoldNum != null">
+        #{unfoldNum,jdbcType=VARCHAR},
+      </if>
+      <if test="unfoldType != null">
+        #{unfoldType,jdbcType=VARCHAR},
+      </if>
+      <if test="unfoldCost != null">
+        #{unfoldCost,jdbcType=VARCHAR},
+      </if>
+      <if test="costDate != null">
+        #{costDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="costUrl != null">
+        #{costUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="customerFlag != null">
+        #{customerFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="customerDate != null">
+        #{customerDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="maintainDate != null">
+        #{maintainDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="maintainStage != null">
+        #{maintainStage,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainStatus != null">
+        #{maintainStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainStageDate != null">
+        #{maintainStageDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="maintainStageUrl != null">
+        #{maintainStageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainStageConclusion != null">
+        #{maintainStageConclusion,jdbcType=VARCHAR},
+      </if>
+      <if test="costCloseDate != null">
+        #{costCloseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="costCloseUrl != null">
+        #{costCloseUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="costBackDate != null">
+        #{costBackDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="costBackMoney != null">
+        #{costBackMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="costCloseMoney != null">
+        #{costCloseMoney,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xpwi.springboot.model.FlowMaintainIndicate">
+    update "flow_maintain_indicate"
+    <set>
+      <if test="routerStage != null">
+        router_stage = #{routerStage,jdbcType=VARCHAR},
+      </if>
+      <if test="jdiUser != null">
+        jdi_user = #{jdiUser,jdbcType=VARCHAR},
+      </if>
+      <if test="transUser != null">
+        trans_user = #{transUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null">
+        "name" = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="target != null">
+        target = #{target,jdbcType=VARCHAR},
+      </if>
+      <if test="fab != null">
+        fab = #{fab,jdbcType=VARCHAR},
+      </if>
+      <if test="moType != null">
+        mo_type = #{moType,jdbcType=VARCHAR},
+      </if>
+      <if test="unfoldSection != null">
+        unfold_section = #{unfoldSection,jdbcType=VARCHAR},
+      </if>
+      <if test="correspondSection != null">
+        correspond_section = #{correspondSection,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fileUrl != null">
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="finishFlag != null">
+        finish_flag = #{finishFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="unfoldDate != null">
+        unfold_date = #{unfoldDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unfoldPic != null">
+        unfold_pic = #{unfoldPic,jdbcType=VARCHAR},
+      </if>
+      <if test="unfoldNum != null">
+        unfold_num = #{unfoldNum,jdbcType=VARCHAR},
+      </if>
+      <if test="unfoldType != null">
+        unfold_type = #{unfoldType,jdbcType=VARCHAR},
+      </if>
+      <if test="unfoldCost != null">
+        unfold_cost = #{unfoldCost,jdbcType=VARCHAR},
+      </if>
+      <if test="costDate != null">
+        cost_date = #{costDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="costUrl != null">
+        cost_url = #{costUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="customerFlag != null">
+        customer_flag = #{customerFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="customerDate != null">
+        customer_date = #{customerDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="maintainDate != null">
+        maintain_date = #{maintainDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="maintainStage != null">
+        maintain_stage = #{maintainStage,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainStatus != null">
+        maintain_status = #{maintainStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainStageDate != null">
+        maintain_stage_date = #{maintainStageDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="maintainStageUrl != null">
+        maintain_stage_url = #{maintainStageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainStageConclusion != null">
+        maintain_stage_conclusion = #{maintainStageConclusion,jdbcType=VARCHAR},
+      </if>
+      <if test="costCloseDate != null">
+        cost_close_date = #{costCloseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="costCloseUrl != null">
+        cost_close_url = #{costCloseUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="costBackDate != null">
+        cost_back_date = #{costBackDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="costBackMoney != null">
+        cost_back_money = #{costBackMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="costCloseMoney != null">
+        cost_close_money = #{costCloseMoney,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where "no" = #{no,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xpwi.springboot.model.FlowMaintainIndicate">
+    update "flow_maintain_indicate"
+    set router_stage = #{routerStage,jdbcType=VARCHAR},
+      jdi_user = #{jdiUser,jdbcType=VARCHAR},
+      trans_user = #{transUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      "name" = #{name,jdbcType=VARCHAR},
+      target = #{target,jdbcType=VARCHAR},
+      fab = #{fab,jdbcType=VARCHAR},
+      mo_type = #{moType,jdbcType=VARCHAR},
+      unfold_section = #{unfoldSection,jdbcType=VARCHAR},
+      correspond_section = #{correspondSection,jdbcType=VARCHAR},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
+      finish_flag = #{finishFlag,jdbcType=VARCHAR},
+      unfold_date = #{unfoldDate,jdbcType=TIMESTAMP},
+      unfold_pic = #{unfoldPic,jdbcType=VARCHAR},
+      unfold_num = #{unfoldNum,jdbcType=VARCHAR},
+      unfold_type = #{unfoldType,jdbcType=VARCHAR},
+      unfold_cost = #{unfoldCost,jdbcType=VARCHAR},
+      cost_date = #{costDate,jdbcType=TIMESTAMP},
+      cost_url = #{costUrl,jdbcType=VARCHAR},
+      customer_flag = #{customerFlag,jdbcType=VARCHAR},
+      customer_date = #{customerDate,jdbcType=TIMESTAMP},
+      maintain_date = #{maintainDate,jdbcType=TIMESTAMP},
+      maintain_stage = #{maintainStage,jdbcType=VARCHAR},
+      maintain_status = #{maintainStatus,jdbcType=VARCHAR},
+      maintain_stage_date = #{maintainStageDate,jdbcType=TIMESTAMP},
+      maintain_stage_url = #{maintainStageUrl,jdbcType=VARCHAR},
+      maintain_stage_conclusion = #{maintainStageConclusion,jdbcType=VARCHAR},
+      cost_close_date = #{costCloseDate,jdbcType=TIMESTAMP},
+      cost_close_url = #{costCloseUrl,jdbcType=VARCHAR},
+      cost_back_date = #{costBackDate,jdbcType=TIMESTAMP},
+      cost_back_money = #{costBackMoney,jdbcType=VARCHAR},
+      cost_close_money = #{costCloseMoney,jdbcType=VARCHAR}
+    where "no" = #{no,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.FlowMaintainIsofilesDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.FlowMaintainIsofiles">
+    <id column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="version" jdbcType="VARCHAR" property="version" />
+    <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="file_code1" jdbcType="VARCHAR" property="fileCode1" />
+    <result column="file_code2" jdbcType="VARCHAR" property="fileCode2" />
+    <result column="file_secrecy" jdbcType="VARCHAR" property="fileSecrecy" />
+    <result column="file_speed" jdbcType="VARCHAR" property="fileSpeed" />
+    <result column="file_stratum" jdbcType="VARCHAR" property="fileStratum" />
+    <result column="group" jdbcType="VARCHAR" property="group" />
+    <result column="effect" jdbcType="VARCHAR" property="effect" />
+    <result column="file_scope" jdbcType="VARCHAR" property="fileScope" />
+    <result column="file_type" jdbcType="VARCHAR" property="fileType" />
+    <result column="managa_system" jdbcType="VARCHAR" property="managaSystem" />
+    <result column="update_reason" jdbcType="VARCHAR" property="updateReason" />
+    <result column="update_before" jdbcType="VARCHAR" property="updateBefore" />
+    <result column="update_after" jdbcType="VARCHAR" property="updateAfter" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="router_stage" jdbcType="VARCHAR" property="routerStage" />
+    <result column="router_stage2" jdbcType="VARCHAR" property="routerStage2" />
+    <result column="supply_dep" jdbcType="VARCHAR" property="supplyDep" />
+    <result column="sum_page" jdbcType="TIMESTAMP" property="sumPage" />
+    <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
+    <result column="customer_ver" jdbcType="VARCHAR" property="customerVer" />
+    <result column="supply_paper" jdbcType="VARCHAR" property="supplyPaper" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    form_id, department_id, department_name, create_user, create_user_id, create_date, 
+    version, file_id, file_name, file_code1, file_code2, file_secrecy, file_speed, file_stratum, 
+    "group", effect, file_scope, file_type, managa_system, update_reason, update_before, 
+    update_after, update_date, router_stage, router_stage2
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+   *
+    from flow_system.flow_maintain_isofiles
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </select>
+    <select id="selectByMaintainIsofiles" resultType="com.xpwi.springboot.model.FlowMaintainIsofiles">
+      select  * from flow_system.flow_maintain_isofiles
+      <where>
+        <if test="fileId != null">
+        file_id = #{fileId}
+      </if>
+        <if test="fileNmae != null">
+          file_name = #{fileNmae}
+        </if>
+        <if test="version != null">
+          version = #{version}
+        </if>
+        <if test="routerStage != null">
+          router_stage = #{routerStage}
+        </if>
+      </where>
+
+
+    </select>
+  <select id="selectByMaintainIsofiles2" parameterType="com.xpwi.springboot.model.FlowMaintainIsofiles" resultMap="BaseResultMap">
+        select  * from flow_system.flow_maintain_isofiles
+        <where>
+          <if test=" formId != null and formId!='' ">
+             form_id like #{formId}
+          </if>
+          <if test="routerStage != null and routerStage!=''">
+           and  router_stage = #{routerStage}
+          </if>
+          <if test="createUserId != null  and createUserId!='' ">
+            and create_user_id = #{createUserId}
+          </if>
+        </where>
+  </select>
+<!--  form_id create_user create_user_id create_date file_name router_stage router_stage2-->
+    <select id="selectByFormIdAndUserIdAndRouterStage" resultType="com.xpwi.springboot.model.FormTrackVO">
+      select  form_id,(CASE WHEN file_type = 'O' THEN '外來文件' when file_type='G' then '技術文件' ELSE 'ISO文件' END) || '-' ||  (case when file_name is null then '' else file_name end) as form_name,
+            (case when router_stage2 = '0' then '新增'
+                    when router_stage2 = '1' then '變更' else '作廢' end)as form_type,
+             (case  when router_stage = '0' then '開立'
+                    when router_stage = '1' then '送簽中'
+                    when router_stage = '2' then '結案'
+                    else '作廢' end) as form_state,
+            create_user as form_employ,create_date as form_date
+        from flow_system.flow_maintain_isofiles
+      <where>
+        <if test="state != null and state!=''">
+          and  router_stage = #{state}
+        </if>
+        <if test="user_id != null  and user_id!='' ">
+          and create_user_id = #{user_id}
+        </if>
+      </where>
+
+    </select>
+    <select id="selectAllByUserSignedList" parameterType="java.lang.String" resultType="java.util.Map">
+      select  b.update_date updateDate, b.form_id formId,b.file_name "name" ,B.create_user createUser,B.create_date createDate from  flow_system.flow_base_signoff a
+      left join flow_system.flow_maintain_isofiles b on a.form_id  = b.form_id
+      where a.user_id  = #{userId} and a.flag = 'N' and file_type ='I'
+      and  (a.form_id,to_number(a.state,'999') )  in (
+      select form_id , min(to_number(state , '999')) state  from flow_system.flow_base_signoff
+      where flag  = 'N' and state != '10'
+      group by form_id )
+    </select>
+  <select id="selectAllByUserSignedList2" parameterType="java.lang.String" resultType="java.util.Map">
+    select  b.update_date updateDate, b.form_id formId,b.file_name "name" ,B.create_user createUser,B.create_date createDate
+    from  flow_system.flow_base_signoff a
+    left join flow_system.flow_maintain_isofiles b on a.form_id  = b.form_id
+    where a.user_id  = #{userId} and a.flag = 'N' and b.file_type ='O' and b.file_id is not null
+    and  (a.form_id,to_number(a.state,'999') )  in (
+     select form_id , min(to_number(state , '999')) state  from flow_system.flow_base_signoff
+     where flag  = 'N' and state != '10'
+     group by form_id )
+  </select>
+  <select id="selectAllByUserWriteList2" parameterType="java.lang.String" resultType="java.util.Map">
+      select update_date updateDate, form_id formId,file_name "name" ,create_user createUser,create_date createDate
+      from  flow_system.flow_maintain_isofiles
+      where create_user_id  = #{userId} and file_type = 'O' and file_id is not null
+      order by create_date desc
+  </select>
+  <select id="selectAllByUserClosedList2" parameterType="java.lang.String" resultType="java.util.Map">
+      select update_date updateDate, form_id formId,file_name "name" ,create_user createUser,create_date createDate
+      from  flow_system.flow_maintain_isofiles
+      where create_user_id  = #{userId} and file_type = 'O' and file_id is not null and  router_stage = '2'
+      order by create_date desc
+  </select>
+  <select id="selectAllByUserSignedList3" parameterType="java.lang.String" resultType="java.util.Map">
+    select  b.update_date updateDate, b.form_id formId,b.file_name "name" ,B.create_user createUser,B.create_date createDate
+    from  flow_system.flow_base_signoff a
+    left join flow_system.flow_maintain_isofiles b on a.form_id  = b.form_id
+    where a.user_id  = #{userId} and a.flag = 'N' and b.file_type ='O' and b.file_id is null
+    and  (a.form_id,to_number(a.state,'999') )  in (
+     select form_id , min(to_number(state , '999')) state  from flow_system.flow_base_signoff
+     where flag  = 'N' and state != '10'
+     group by form_id )
+  </select>
+  <select id="selectAllByUserWriteList3" parameterType="java.lang.String" resultType="java.util.Map">
+    select update_date updateDate, form_id formId,file_name "name" ,create_user createUser,create_date createDate
+    from  flow_system.flow_maintain_isofiles
+    where create_user_id  =  #{userId} and file_type = 'O' and file_id is null
+    order by create_date desc
+  </select>
+  <select id="selectAllByUserClosedList3" parameterType="java.lang.String" resultType="java.util.Map">
+    select update_date updateDate, form_id formId,file_name "name" ,create_user createUser,create_date createDate
+    from  flow_system.flow_maintain_isofiles
+    where create_user_id  =  #{userId} and file_type = 'O' and file_id is null and  router_stage = '2'
+    order by create_date desc
+  </select>
+  <select id="selectAllByUserWriteList" parameterType="java.lang.String" resultType="java.util.Map">
+    select update_date updateDate, form_id formId,file_name "name" ,create_user createUser,create_date createDate
+    from  flow_system.flow_maintain_isofiles
+    where create_user_id  = #{userId} and file_type = 'I'
+    order by create_date desc
+  </select>
+  <select id="selectAllByUserClosedList" resultType="java.util.Map">
+    select update_date updateDate, form_id formId,file_name "name" ,create_user createUser,create_date createDate
+    from  flow_system.flow_maintain_isofiles
+    where create_user_id  = #{userId} and file_type = 'I' and router_stage = '2'
+    order by create_date desc
+  </select>
+    <select id="selectMax" resultType="java.lang.String">
+      select max(form_id) from flow_system.flow_maintain_isofiles where
+       file_id = #{file_id}  and file_name = #{file_id}
+    </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from flow_system.flow_maintain_isofiles
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xpwi.springboot.model.FlowMaintainIsofiles" >
+    insert into flow_system.flow_maintain_isofiles (form_id,department_id, department_name, create_user,
+      create_user_id, create_date, version, 
+      file_id, file_name, file_code1, 
+      file_code2, file_secrecy, file_speed, 
+      file_stratum, "group", effect, 
+      file_scope, file_type, managa_system, 
+      update_reason, update_before, update_after, 
+      update_date, router_stage, router_stage2,supply_dep,sum_page,customer_id,customer_ver,supply_paper
+      )
+    values (#{formId,jdbcType=VARCHAR},#{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR},
+      #{createUserId,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{version,jdbcType=VARCHAR}, 
+      #{fileId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{fileCode1,jdbcType=VARCHAR}, 
+      #{fileCode2,jdbcType=VARCHAR}, #{fileSecrecy,jdbcType=VARCHAR}, #{fileSpeed,jdbcType=VARCHAR}, 
+      #{fileStratum,jdbcType=VARCHAR}, #{group,jdbcType=VARCHAR}, #{effect,jdbcType=VARCHAR}, 
+      #{fileScope,jdbcType=VARCHAR}, #{fileType,jdbcType=VARCHAR}, #{managaSystem,jdbcType=VARCHAR}, 
+      #{updateReason,jdbcType=VARCHAR}, #{updateBefore,jdbcType=VARCHAR}, #{updateAfter,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{routerStage,jdbcType=VARCHAR}, #{routerStage2,jdbcType=VARCHAR},
+        #{supplyDep},#{sumPage},#{customerId},#{customerVer},#{supplyPaper}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="form_id" keyProperty="formId" parameterType="com.xpwi.springboot.model.FlowMaintainIsofiles" useGeneratedKeys="true">
+    insert into flow_system.flow_maintain_isofiles
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        form_id,
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="departmentName != null">
+        department_name,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="fileId != null">
+        file_id,
+      </if>
+      <if test="fileName != null">
+        file_name,
+      </if>
+      <if test="fileCode1 != null">
+        file_code1,
+      </if>
+      <if test="fileCode2 != null">
+        file_code2,
+      </if>
+      <if test="fileSecrecy != null">
+        file_secrecy,
+      </if>
+      <if test="fileSpeed != null">
+        file_speed,
+      </if>
+      <if test="fileStratum != null">
+        file_stratum,
+      </if>
+      <if test="group != null">
+        "group",
+      </if>
+      <if test="effect != null">
+        effect,
+      </if>
+      <if test="fileScope != null">
+        file_scope,
+      </if>
+      <if test="fileType != null">
+        file_type,
+      </if>
+      <if test="managaSystem != null">
+        managa_system,
+      </if>
+      <if test="updateReason != null">
+        update_reason,
+      </if>
+      <if test="updateBefore != null">
+        update_before,
+      </if>
+      <if test="updateAfter != null">
+        update_after,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="routerStage != null">
+        router_stage,
+      </if>
+      <if test="routerStage2 != null">
+        router_stage2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="formId != null">
+        #{formId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+      #{departmentId,jdbcType=VARCHAR},
+    </if>
+      <if test="departmentName != null">
+        #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null">
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileCode1 != null">
+        #{fileCode1,jdbcType=VARCHAR},
+      </if>
+      <if test="fileCode2 != null">
+        #{fileCode2,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSecrecy != null">
+        #{fileSecrecy,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSpeed != null">
+        #{fileSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="fileStratum != null">
+        #{fileStratum,jdbcType=VARCHAR},
+      </if>
+      <if test="group != null">
+        #{group,jdbcType=VARCHAR},
+      </if>
+      <if test="effect != null">
+        #{effect,jdbcType=VARCHAR},
+      </if>
+      <if test="fileScope != null">
+        #{fileScope,jdbcType=VARCHAR},
+      </if>
+      <if test="fileType != null">
+        #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="managaSystem != null">
+        #{managaSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="updateReason != null">
+        #{updateReason,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBefore != null">
+        #{updateBefore,jdbcType=VARCHAR},
+      </if>
+      <if test="updateAfter != null">
+        #{updateAfter,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="routerStage != null">
+        #{routerStage,jdbcType=VARCHAR},
+      </if>
+      <if test="routerStage2 != null">
+        #{routerStage2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xpwi.springboot.model.FlowMaintainIsofiles">
+    update flow_system.flow_maintain_isofiles
+    <set>
+      <if test="departmentId != null">
+        department_id = #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentName != null">
+        department_name = #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null">
+        file_id = #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileCode1 != null">
+        file_code1 = #{fileCode1,jdbcType=VARCHAR},
+      </if>
+      <if test="fileCode2 != null">
+        file_code2 = #{fileCode2,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSecrecy != null">
+        file_secrecy = #{fileSecrecy,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSpeed != null">
+        file_speed = #{fileSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="fileStratum != null">
+        file_stratum = #{fileStratum,jdbcType=VARCHAR},
+      </if>
+      <if test="group != null">
+        "group" = #{group,jdbcType=VARCHAR},
+      </if>
+      <if test="effect != null">
+        effect = #{effect,jdbcType=VARCHAR},
+      </if>
+      <if test="fileScope != null">
+        file_scope = #{fileScope,jdbcType=VARCHAR},
+      </if>
+      <if test="fileType != null">
+        file_type = #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="managaSystem != null">
+        managa_system = #{managaSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="updateReason != null">
+        update_reason = #{updateReason,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBefore != null">
+        update_before = #{updateBefore,jdbcType=VARCHAR},
+      </if>
+      <if test="updateAfter != null">
+        update_after = #{updateAfter,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="routerStage != null">
+        router_stage = #{routerStage,jdbcType=VARCHAR},
+      </if>
+      <if test="routerStage2 != null">
+        router_stage2 = #{routerStage2,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyDep != null">
+        supply_dep = #{supplyDep,jdbcType=VARCHAR},
+      </if>
+      <if test="sumPage != null">
+        sum_page = #{sumPage,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerVer != null">
+        customer_ver = #{customerVer,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyPaper != null">
+        supply_paper = #{supplyPaper,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xpwi.springboot.model.FlowMaintainIsofiles">
+    update flow_system.flow_maintain_isofiles
+    set department_id = #{departmentId,jdbcType=VARCHAR},
+      department_name = #{departmentName,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      version = #{version,jdbcType=VARCHAR},
+      file_id = #{fileId,jdbcType=VARCHAR},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      file_code1 = #{fileCode1,jdbcType=VARCHAR},
+      file_code2 = #{fileCode2,jdbcType=VARCHAR},
+      file_secrecy = #{fileSecrecy,jdbcType=VARCHAR},
+      file_speed = #{fileSpeed,jdbcType=VARCHAR},
+      file_stratum = #{fileStratum,jdbcType=VARCHAR},
+      "group" = #{group,jdbcType=VARCHAR},
+      effect = #{effect,jdbcType=VARCHAR},
+      file_scope = #{fileScope,jdbcType=VARCHAR},
+      file_type = #{fileType,jdbcType=VARCHAR},
+      managa_system = #{managaSystem,jdbcType=VARCHAR},
+      update_reason = #{updateReason,jdbcType=VARCHAR},
+      update_before = #{updateBefore,jdbcType=VARCHAR},
+      update_after = #{updateAfter,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      router_stage = #{routerStage,jdbcType=VARCHAR},
+      router_stage2 = #{routerStage2,jdbcType=VARCHAR}
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

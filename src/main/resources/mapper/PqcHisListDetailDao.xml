@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.PqcHisListDetailDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.PqcHisListDetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="list_no" jdbcType="VARCHAR" property="listNo" />
+    <result column="site_name" jdbcType="VARCHAR" property="siteName" />
+    <result column="seq" jdbcType="VARCHAR" property="seq" />
+    <result column="check_item" jdbcType="VARCHAR" property="checkItem" />
+    <result column="error_code" jdbcType="VARCHAR" property="errorCode" />
+    <result column="error_desc" jdbcType="VARCHAR" property="errorDesc" />
+    <result column="check_result" jdbcType="VARCHAR" property="checkResult" />
+    <result column="ref_doc" jdbcType="VARCHAR" property="refDoc" />
+    <result column="violator" jdbcType="VARCHAR" property="violator" />
+    <result column="notify_user" jdbcType="VARCHAR" property="notifyUser" />
+    <result column="is_imp" jdbcType="VARCHAR" property="isImp" />
+    <result column="pic_user" jdbcType="VARCHAR" property="picUser" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="suggest" jdbcType="VARCHAR" property="suggest" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, list_no, site_name, seq, check_item, error_code, error_desc, check_result, ref_doc, 
+    violator, notify_user, is_imp, pic_user, remark, suggest
+  </sql>
+  <update id="updatePqcHisListDetail" parameterType="com.xpwi.springboot.model.PqcHisListDetail">
+    update  flow_system.pqc_his_list_detail
+    <set>
+      <if test="siteName !=null and siteName !=''">
+        site_name=#{siteName},
+      </if>
+      <if test="seq !=null and seq !=''">
+        seq=#{seq},
+      </if>
+      <if test="errorCode !=null and errorCode !=''">
+        error_code=#{errorCode},
+      </if>
+      <if test="errorDesc !=null and errorDesc !=''">
+        error_desc=#{errorDesc},
+      </if>
+      <if test="checkItem !=null and checkItem !=''">
+        check_item=#{checkItem},
+      </if>
+      <if test="checkResult !=null and checkResult !=''">
+        check_result=#{checkResult},
+      </if>
+      <if test="refDoc !=null and refDoc !=''">
+        ref_doc=#{refDoc},
+      </if>
+      <if test="violator !=null and violator !=''">
+        violator=#{violator},
+      </if>
+      <if test="notifyUser !=null and notifyUser !=''">
+        notify_user=#{notifyUser},
+      </if>
+      <if test="isImp !=null and isImp !=''">
+        is_imp=#{isImp},
+      </if>
+      <if test="picUser !=null and picUser !=''">
+        pic_user=#{picUser},
+      </if>
+      <if test="remark !=null and remark !=''">
+        remark=#{remark},
+      </if>
+      <if test="suggest !=null and suggest !=''">
+        suggest=#{suggest}
+      </if>
+    </set>
+    where id=#{id}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from flow_system.pqc_his_list_detail
+    where    list_no=#{listNo}
+  </select>
+  <select id="selectByPqcHisListDetail" resultMap="BaseResultMap"
+          parameterType="com.xpwi.springboot.model.PqcHisListDetail">
+    select *
+    from flow_system.pqc_his_list_detail
+    <where>
+      <if test="listNo !=null and listNo !=''">
+        list_no=#{listNo}
+      </if>
+      <if test="siteName !=null and siteName !=''">
+        site_name=#{siteName}
+      </if>
+      <if test="seq !=null and seq !=''">
+        seq=#{seq}
+      </if>
+      <if test="errorCode !=null and errorCode !=''">
+        error_code=#{errorCode}
+      </if>
+      <if test="errorDesc !=null and errorDesc !=''">
+        error_desc=#{errorDesc}
+      </if>
+      <if test="checkItem !=null and checkItem !=''">
+        check_item=#{checkItem}
+      </if>
+      <if test="checkResult !=null and checkResult !=''">
+        check_result=#{checkResult}
+      </if>
+      <if test="refDoc !=null and refDoc !=''">
+        ref_doc=#{refDoc}
+      </if>
+      <if test="violator !=null and violator !=''">
+        violator=#{violator}
+      </if>
+      <if test="notifyUser !=null and notifyUser !=''">
+        notify_user=#{notifyUser}
+      </if>
+      <if test="isImp !=null and isImp !=''">
+        is_imp=#{isImp}
+      </if>
+      <if test="picUser !=null and picUser !=''">
+        pic_user=#{picUser}
+      </if>
+      <if test="remark !=null and remark !=''">
+        remark=#{remark}
+      </if>
+      <if test="suggest !=null and suggest !=''">
+        suggest=#{suggest}
+      </if>
+    </where>
+  </select>
+    <select id="selectSuggestCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+      select count(*) from flow_system.pqc_his_list_detail where list_no=#{listNo} and suggest is null
+    </select>
+  <select id="selectByListNoAndSuggetIsNull" resultMap="BaseResultMap"
+          parameterType="java.lang.String">
+    select * from flow_system.pqc_his_list_detail
+    where    list_no=#{listNo}  and   suggest is null
+    and pic_user=#{picUser}
+
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from flow_system.pqc_his_list_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xpwi.springboot.model.PqcHisListDetail" useGeneratedKeys="true">
+    insert into flow_system.pqc_his_list_detail (list_no, site_name, seq,
+      check_item, error_code, error_desc, 
+      check_result, ref_doc, violator, 
+      notify_user, is_imp, pic_user, 
+      remark, suggest)
+    values (#{listNo,jdbcType=VARCHAR}, #{siteName,jdbcType=VARCHAR}, #{seq,jdbcType=VARCHAR}, 
+      #{checkItem,jdbcType=VARCHAR}, #{errorCode,jdbcType=VARCHAR}, #{errorDesc,jdbcType=VARCHAR}, 
+      #{checkResult,jdbcType=VARCHAR}, #{refDoc,jdbcType=VARCHAR}, #{violator,jdbcType=VARCHAR}, 
+      #{notifyUser,jdbcType=VARCHAR}, #{isImp,jdbcType=VARCHAR}, #{picUser,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{suggest,jdbcType=VARCHAR})
+  </insert>
+
+</mapper>

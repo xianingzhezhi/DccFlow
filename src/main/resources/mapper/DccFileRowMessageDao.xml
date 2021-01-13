@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpwi.springboot.dao.DccFileRowMessageDao">
+  <resultMap id="BaseResultMap" type="com.xpwi.springboot.model.DccFileRowMessage">
+    <id column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="file_version" jdbcType="VARCHAR" property="fileVersion" />
+    <result column="file_page" jdbcType="VARCHAR" property="filePage" />
+    <result column="file_part" jdbcType="VARCHAR" property="filePart" />
+    <result column="file_grade" jdbcType="VARCHAR" property="fileGrade" />
+    <result column="file_remark" jdbcType="VARCHAR" property="fileRemark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    form_id, file_id, file_name, file_version, file_page, file_part, file_grade, file_remark
+  </sql>
+  <delete id="delete" parameterType="java.lang.String">
+    delete from flow_system.dcc_file_rowmessage  where form_id = #{formId,jdbcType=VARCHAR}
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from flow_system.dcc_file_rowmessage
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </select>
+
+  <insert id="insert"  parameterType="com.xpwi.springboot.model.DccFileRowMessage" >
+    insert into flow_system.dcc_file_rowmessage (form_id,file_id, file_name, file_version,
+      file_page, file_part, file_grade, 
+      file_remark)
+    values (#{formId,jdbcType=VARCHAR},#{fileId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{fileVersion,jdbcType=VARCHAR},
+      #{filePage,jdbcType=VARCHAR}, #{filePart,jdbcType=VARCHAR}, #{fileGrade,jdbcType=VARCHAR}, 
+      #{fileRemark,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.xpwi.springboot.model.DccFileRowMessage">
+    update flow_system.dcc_file_rowmessage
+    <set>
+      <if test="fileId != null">
+        file_id = #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileVersion != null">
+        file_version = #{fileVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="filePage != null">
+        file_page = #{filePage,jdbcType=VARCHAR},
+      </if>
+      <if test="filePart != null">
+        file_part = #{filePart,jdbcType=VARCHAR},
+      </if>
+      <if test="fileGrade != null">
+        file_grade = #{fileGrade,jdbcType=VARCHAR},
+      </if>
+      <if test="fileRemark != null">
+        file_remark = #{fileRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xpwi.springboot.model.DccFileRowMessage">
+    update flow_system.dcc_file_rowmessage
+    set file_id = #{fileId,jdbcType=VARCHAR},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      file_version = #{fileVersion,jdbcType=VARCHAR},
+      file_page = #{filePage,jdbcType=VARCHAR},
+      file_part = #{filePart,jdbcType=VARCHAR},
+      file_grade = #{fileGrade,jdbcType=VARCHAR},
+      file_remark = #{fileRemark,jdbcType=VARCHAR}
+    where form_id = #{formId,jdbcType=VARCHAR}
+  </update>
+</mapper>
